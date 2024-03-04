@@ -10,8 +10,8 @@ class Themes {
       titleTextStyle: TextStyle(
         color: Color(0xFF0E131F),
         fontSize: 20,
+        fontFamily: 'Nunito',
         fontWeight: FontWeight.bold,
-        fontFamily: 'Nunito Bold'
       ),
       centerTitle: true,
     ),
@@ -25,10 +25,15 @@ class Themes {
     ),
     
     fontFamily: 'Nunito',
-    textTheme: TextTheme(
-      bodyLarge: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w900),
-      bodyMedium: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w900),
-      bodySmall: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w900),
+    textTheme: const TextTheme(
+      bodyLarge: TextStyle(fontSize: 18.0),
+      bodyMedium: TextStyle(fontSize: 16.0),
+      bodySmall: TextStyle(fontSize: 14.0),
+    ),
+    bottomNavigationBarTheme: const BottomNavigationBarThemeData(
+      backgroundColor: Color(0xFFC2B2B4),
+      selectedItemColor: Color(0xFF53B175),
+      unselectedItemColor: Color(0xFFF0FFCE),
     ),
     
   );
@@ -40,8 +45,7 @@ class Themes {
       titleTextStyle: TextStyle(
         color: Color(0xFF0E131F),
         fontSize: 20,
-        fontWeight: FontWeight.bold,
-        fontFamily: 'Nunito Bold'
+        fontFamily: 'Nunito'
       ),
       centerTitle: true,
     ),
@@ -55,10 +59,10 @@ class Themes {
     ),
     
     fontFamily: 'Nunito',
-    textTheme: TextTheme(
-      bodyLarge: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w900),
-      bodyMedium: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w900),
-      bodySmall: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w900),
+    textTheme: const TextTheme(
+      bodyLarge: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w400),
+      bodyMedium: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w400),
+      bodySmall: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400),
     ),
   );
 } 
