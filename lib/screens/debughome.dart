@@ -1,20 +1,29 @@
 import 'package:flutter/material.dart';
+import 'register.dart';
 
-class debugHome extends StatefulWidget {
-  @override
-  _debugHomeState createState() => _debugHomeState();
-}
-
-class _debugHomeState extends State<debugHome> {
+class debugHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Mothership"),
-        
       ),
-      body: const Center(
-        child: Text("Welcome to Mothership debug home!"),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Center(
+            child: Text("Welcome to Mothership debug home!"),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Register()),
+              );
+            },
+            child: Text('Register'),
+          ),
+        ],
       ),
     );
   }
