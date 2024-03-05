@@ -3,15 +3,15 @@ import 'theme.dart';
 import 'dart:io';
 import 'screens/settings.dart';
 import 'screens/debughome.dart';
+import 'screens/register.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({Key? key});
 
- 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -24,30 +24,29 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key});
-  
+  const MyHomePage({Key? key});
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-
   int _selectedPage = 0;
+
   void _onItemTapped(int index) {
     setState(() {
       _selectedPage = index;
     });
   }
+
   final _pageOptions = [
     debugHome(),
     Settings(),
+    Register(),
   ];
 
   @override
   Widget build(BuildContext context) {
-    
-
     return Scaffold(
       body: _pageOptions[_selectedPage],
       bottomNavigationBar: BottomNavigationBar(
@@ -63,13 +62,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
         currentIndex: _selectedPage,
         onTap: _onItemTapped,
-      ),
-    );
-  }
-
-  void pushSettings() {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (context) => Settings())
+      ), 
     );
   }
 }
