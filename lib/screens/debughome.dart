@@ -14,6 +14,7 @@ class debugHome extends StatelessWidget {
           const Center(
             child: Text("Welcome to Mothership debug home!"),
           ),
+          SizedBox(height:10),
           ElevatedButton(
             onPressed: () {
               Navigator.push(

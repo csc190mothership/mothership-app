@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
 class Register extends StatefulWidget {
+  const Register({super.key});
+
   @override
   _RegisterState createState() => _RegisterState();
 }
 
 class _RegisterState extends State<Register> {
+
+  TextStyle fieldStyle = const TextStyle(fontWeight: FontWeight.bold, fontSize: 18);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,52 +21,43 @@ class _RegisterState extends State<Register> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               "Email",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+              style: fieldStyle,
             ),
-            TextField(
+            const TextField(
               decoration: InputDecoration(
                 hintText: "Enter your email",
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               "Password",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+              style: fieldStyle,
             ),
-            TextField(
+            const TextField(
               decoration: InputDecoration(
                 hintText: "Enter your password",
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Text(
               "Phone Number",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-              ),
+              style: fieldStyle,
             ),
-            TextField(
+            const TextField(
               decoration: InputDecoration(
                 hintText: "Enter your phone number",
               ),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             Center(
               child: ElevatedButton(
                 onPressed: () {
                   // TODO: Implement registration logic with supabase
                 },
-                child: Text('Register'),
+                child: const Text('Register'),
               ),
             ),
           ],

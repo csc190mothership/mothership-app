@@ -42,13 +42,12 @@ class _SettingsState extends State<Settings> {
       settingsDivider(),
       ]);
     }
-    return Column(children:[
+    return 
       ListTile(
         title: Text(title),
         trailing: const Icon(Icons.arrow_forward),
         onTap: onTap as void Function()?,
-      ),
-    ]);
+      );
   }
 
   Widget settingsDivider() {
