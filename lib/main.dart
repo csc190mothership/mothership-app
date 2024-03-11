@@ -4,9 +4,16 @@ import 'dart:io';
 import 'screens/settings.dart';
 import 'screens/debughome.dart';
 import 'screens/register.dart';
+import 'package:provider/provider.dart';
+import 'themeprovider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+   ChangeNotifierProvider(
+    create: (context) => ThemeProvider(),
+    child: const MyApp()
+    )
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -16,8 +23,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: Themes.lightTheme,
-      darkTheme: Themes.darkTheme,
+      theme: Provider.of<ThemeProvider>(context).getTheme(),
       home: const MyHomePage(),
     );
   }

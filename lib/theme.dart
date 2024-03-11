@@ -18,7 +18,7 @@ class Themes {
 
     colorScheme: const ColorScheme.light(
       brightness: Brightness.light,
-      background: Color(0xFFF0FFCE),
+      background: Color(0xFFe6e6e6),
       onBackground: Color(0xFF0E131F),
       primary: Color(0xFFC2B2B4),
       onPrimary: Color(0xFF0E131F),
@@ -27,14 +27,14 @@ class Themes {
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(Color(0xFF0E131F)),
-        foregroundColor: MaterialStateProperty.all<Color>(Color(0xFFC2B2B4)),
+        foregroundColor: MaterialStateProperty.all<Color>(Color(0xFFe6e6e6)),
       ),
     ),
 
     bottomNavigationBarTheme: const BottomNavigationBarThemeData(
       backgroundColor: Color(0xFFC2B2B4),
       selectedItemColor: Color(0xFF53B175),
-      unselectedItemColor: Color(0xFFF0FFCE),
+      unselectedItemColor: Color(0xFFe6e6e6),
     ),
     //TEXT BELOW \/\/\/
     fontFamily: 'Nunito',
@@ -62,7 +62,7 @@ class Themes {
     colorScheme: const ColorScheme.dark(
       brightness: Brightness.dark,
       background:Color(0xFF0E131F), 
-      onBackground: Color(0xFFF0FFCE),
+      onBackground: Color(0xFFe6e6e6),
       primary: Color(0xFFC2B2B4),
       onPrimary: Color(0xFF0E131F),
     ),
