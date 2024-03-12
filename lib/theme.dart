@@ -54,7 +54,8 @@ class Themes {
       titleTextStyle: TextStyle(
         color: Color(0xFF0E131F),
         fontSize: 20,
-        fontFamily: 'Nunito'
+        fontFamily: 'Nunito',
+        fontWeight: FontWeight.bold,
       ),
       centerTitle: true,
     ),
