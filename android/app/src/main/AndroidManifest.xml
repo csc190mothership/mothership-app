@@ -26,6 +26,18 @@
                 <action android:name="android.intent.action.MAIN"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
+                <!-- Deep Links -->
+				    <meta-data android:name="flutter_deeplinking_enabled" android:value="true" />
+            <intent-filter>
+            <action android:name="android.intent.action.VIEW" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <category android:name="android.intent.category.BROWSABLE" />
+            <data
+                android:scheme="mfa-app"
+                android:host="callback" />
+            </intent-filter>
+            <!-- END Deep Links -->
+
             <!-- Add this intent-filter for Deep Links -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

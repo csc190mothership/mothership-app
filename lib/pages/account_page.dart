@@ -165,6 +165,13 @@ class _AccountPageState extends State<AccountPage> {
               child: const Text('Save')),
           ElevatedButton(
               onPressed: () async {
+                if (mounted) {
+                  Navigator.of(context).pushReplacementNamed('/listmfa');
+                }
+              },
+              child: const Text('MFA List')),
+          ElevatedButton(
+              onPressed: () async {
                 await supabase.auth.signOut();
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(

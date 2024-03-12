@@ -18,6 +18,13 @@ class _RegisterPageState extends State<RegisterPage> {
   final _passwordController = TextEditingController();
   late final StreamSubscription<AuthState> _authSubscription;
 
+  void verifyEmail() {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Email Verification Sent!')));
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -71,11 +78,16 @@ class _RegisterPageState extends State<RegisterPage> {
                 try {
                   final email = _emailController.text.trim();
                   final password = _passwordController.text.trim();
-                  await supabase.auth.signUp(email: email, password: password);
+                  await supabase.auth.signUp(
+                      email: email,
+                      password: password,
+                      emailRedirectTo:
+                          'mfa-app://callback${Navigator.of(context).pushReplacementNamed('/mfaenroll')}');
                   if (mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Register successful!')));
-                    Navigator.of(context).pushReplacementNamed('/account');
+                    Timer(const Duration(seconds: 3), verifyEmail);
+                    //Navigator.of(context).pushReplacementNamed('/account');
                   }
                 } on AuthException catch (error) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(

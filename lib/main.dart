@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mothership/pages/account_page.dart';
 import 'package:mothership/pages/login_page.dart';
+import 'package:mothership/pages/mfa/enroll_page.dart';
+import 'package:mothership/pages/mfa/list_mfa_page.dart';
+import 'package:mothership/pages/mfa/verify_page.dart';
 import 'package:mothership/pages/register_page.dart';
 import 'package:mothership/pages/splash_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -22,7 +25,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Mothership',
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
@@ -33,6 +36,9 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterPage(),
         '/login': (context) => const LoginPage(),
         '/account': (context) => const AccountPage(),
+        '/mfaenroll': (context) => const MFAEnrollPage(),
+        '/mfaverify': (context) => const MFAVerifyPage(),
+        '/listmfa': (context) => ListMFAPage(),
       },
     );
   }

@@ -77,7 +77,7 @@ class _LoginPageState extends State<LoginPage> {
                   if (mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Login successful!')));
-                    Navigator.of(context).pushReplacementNamed('/account');
+                    Navigator.of(context).pushReplacementNamed('/mfaverify');
                   }
                 } on AuthException catch (error) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
