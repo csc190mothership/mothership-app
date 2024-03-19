@@ -50,11 +50,22 @@ class ListMFAPage extends StatelessWidget {
                               ),
                               TextButton(
                                 onPressed: () async {
-                                  await supabase.auth.mfa.unenroll(factor.id);
-                                  await supabase.auth.signOut();
-                                  if (context.mounted) {
-                                    Navigator.of(context)
-                                        .pushReplacementNamed('/register');
+                                  try {
+                                    await supabase.auth.mfa.unenroll(factor.id);
+                                    await supabase.auth.signOut();
+                                    if (context.mounted) {
+                                      Navigator.of(context)
+                                          .pushReplacementNamed('/register');
+                                    }
+                                  } catch (error) {
+                                    Navigator.pushNamed(context, '/');
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(SnackBar(
+                                      content: const Text(
+                                          'Permission denied! MFA disabled.'),
+                                      backgroundColor:
+                                          Theme.of(context).colorScheme.error,
+                                    ));
                                   }
                                 },
                                 child: const Text('delete'),

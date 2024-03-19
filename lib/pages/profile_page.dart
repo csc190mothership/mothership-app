@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mothership/main.dart';
 
-class AccountPage extends StatefulWidget {
-  const AccountPage({super.key});
+class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
 
   @override
-  State<AccountPage> createState() => _AccountPageState();
+  State<ProfilePage> createState() => _ProfilePageState();
 }
 
-class _AccountPageState extends State<AccountPage> {
+class _ProfilePageState extends State<ProfilePage> {
   final _firstnameController = TextEditingController();
   final _lastnameController = TextEditingController();
   final _genderController = TextEditingController();
@@ -39,53 +39,51 @@ class _AccountPageState extends State<AccountPage> {
     final userId = supabase.auth.currentUser!.id;
     final data =
         await supabase.from('profiles').select().eq('id', userId).single();
-    setState(() {
-      if (data['first_name'] != null) {
-        _firstnameController.text = data['first_name'];
-      }
-      if (data['last_name'] != null) {
-        _lastnameController.text = data['last_name'];
-      }
-      if (data['gender'] != null) {
-        _genderController.text = data['gender'];
-      }
-      if (data['last_name'] != null) {
-        _addressoneController.text = data['address_one'];
-      }
-      if (data['first_name'] != null) {
-        _addresstwoController.text = data['address_two'];
-      }
-      if (data['last_name'] != null) {
-        _cityController.text = data['city'];
-      }
-      if (data['first_name'] != null) {
-        _regionController.text = data['region'];
-      }
-      if (data['last_name'] != null) {
-        _zipController.text = data['zip'];
-      }
-      if (data['first_name'] != null) {
-        _countryController.text = data['country'];
-      }
-      if (data['mfa_option'] != null) {
-        selectedOption = data['mfa_option'];
-      }
-    });
+    if (mounted) {
+      setState(() {
+        if (data['first_name'] != null) {
+          _firstnameController.text = data['first_name'];
+        }
+        if (data['last_name'] != null) {
+          _lastnameController.text = data['last_name'];
+        }
+        if (data['gender'] != null) {
+          _genderController.text = data['gender'];
+        }
+        if (data['last_name'] != null) {
+          _addressoneController.text = data['address_one'];
+        }
+        if (data['first_name'] != null) {
+          _addresstwoController.text = data['address_two'];
+        }
+        if (data['last_name'] != null) {
+          _cityController.text = data['city'];
+        }
+        if (data['first_name'] != null) {
+          _regionController.text = data['region'];
+        }
+        if (data['last_name'] != null) {
+          _zipController.text = data['zip'];
+        }
+        if (data['first_name'] != null) {
+          _countryController.text = data['country'];
+        }
+        if (data['mfa_option'] != null) {
+          selectedOption = data['mfa_option'];
+        }
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Account Setup'),
+        title: const Text('Profile'),
       ),
       body: ListView(
         padding: const EdgeInsets.all(10),
         children: [
-          const Text(
-            'Enter your personal information to finish registration.',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
           TextFormField(
             controller: _firstnameController,
             decoration: const InputDecoration(
@@ -150,11 +148,7 @@ class _AccountPageState extends State<AccountPage> {
                 activeColor: Colors.red,
                 fillColor: MaterialStateProperty.all(Colors.red),
                 splashRadius: 20,
-                onChanged: (val) {
-                  setState(() {
-                    selectedOption = val!;
-                  });
-                }),
+                onChanged: (val) {}),
           ),
           ListTile(
             title: const Text('Disable'),
@@ -164,50 +158,16 @@ class _AccountPageState extends State<AccountPage> {
                 activeColor: Colors.blue,
                 fillColor: MaterialStateProperty.all(Colors.blue),
                 splashRadius: 25,
-                onChanged: (val) {
-                  setState(() {
-                    selectedOption = val!;
-                  });
-                }),
+                onChanged: (val) {}),
           ),
-          const SizedBox(height: 12),
+          //Edit Profile
           ElevatedButton(
               onPressed: () async {
-                final firstname = _firstnameController.text.trim();
-                final lastname = _lastnameController.text.trim();
-                final gender = _genderController.text.trim();
-                final mainaddress = _addressoneController.text.trim();
-                final secondaryaddress = _addresstwoController.text.trim();
-                final city = _cityController.text.trim();
-                final region = _regionController.text.trim();
-                final zip = _zipController.text.trim();
-                final country = _countryController.text.trim();
-                final userId = supabase.auth.currentUser!.id;
-                await supabase.from('profiles').update({
-                  'first_name': firstname,
-                  'last_name': lastname,
-                  'gender': gender,
-                  'address_one': mainaddress,
-                  'address_two': secondaryaddress,
-                  'city': city,
-                  'region': region,
-                  'zip': zip,
-                  'country': country,
-                  'mfa_option': selectedOption,
-                }).eq('id', userId);
                 if (mounted) {
-                  Navigator.of(context).pushReplacementNamed('/verifyemail');
+                  Navigator.of(context).pushReplacementNamed('/account');
                 }
-                /*
-                // Give user a saved message
-                if (mounted) {
-                  ScaffoldMessenger.of(context)
-                      .showSnackBar(const SnackBar(content: Text('Saved!')));
-                }
-                */
               },
-              child: const Text('Continue')),
-          /* 
+              child: const Text('Edit')),
           //Navigate to MFA device list
           ElevatedButton(
               onPressed: () async {
@@ -227,7 +187,6 @@ class _AccountPageState extends State<AccountPage> {
                 }
               },
               child: const Text('Sign Out')),
-          */
         ],
       ),
     );

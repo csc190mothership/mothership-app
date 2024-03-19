@@ -4,8 +4,10 @@ import 'package:mothership/pages/login_page.dart';
 import 'package:mothership/pages/mfa/enroll_page.dart';
 import 'package:mothership/pages/mfa/list_mfa_page.dart';
 import 'package:mothership/pages/mfa/verify_page.dart';
+import 'package:mothership/pages/profile_page.dart';
 import 'package:mothership/pages/register_page.dart';
 import 'package:mothership/pages/splash_page.dart';
+import 'package:mothership/pages/verifyemail_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
@@ -36,9 +38,11 @@ class MyApp extends StatelessWidget {
         '/register': (context) => const RegisterPage(),
         '/login': (context) => const LoginPage(),
         '/account': (context) => const AccountPage(),
+        '/profile': (context) => const ProfilePage(),
         '/mfaenroll': (context) => const MFAEnrollPage(),
         '/mfaverify': (context) => const MFAVerifyPage(),
         '/listmfa': (context) => ListMFAPage(),
+        '/verifyemail': (context) => const VerifyEmailPage(),
       },
     );
   }
