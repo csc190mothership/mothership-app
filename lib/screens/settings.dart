@@ -152,7 +152,7 @@ class _AccountSettingsState extends State<AccountSettings> {
       body: ListView(
         children: [
           settingsHeader("My Account"),
-          settingsTile("Change Email", (){showMyDialog(context, "Change Email");}),
+          settingsTile("Change Email", (){changeSomething(context, "Change Email");}),
           
           
         ],
@@ -162,20 +162,35 @@ class _AccountSettingsState extends State<AccountSettings> {
 }
 
 
-Future<void> showMyDialog(context, varToChange) async {
+Future<void> changeSomething(context, varToChange) async {
+  var _newItem = "";
   return showDialog<void>(
     context: context,
     barrierDismissible: true, // user must tap button!
     builder: (BuildContext context) {
       return AlertDialog(
         title: const Text('Change Variable'),
-        content: const SingleChildScrollView(
+        content: SingleChildScrollView(
           child: ListBody(
             children: <Widget>[
               Text('Old Value: '),
-              TextField(),
+              TextField(
+                  //later will have to confirm the old value matches.
+                  //for now, its just a field.
+
+                  
+              
+                ),
               Text('New Value: '),
-              TextField(),
+              TextField(
+                onChanged: (value) {
+                  _newItem = value;
+                  //then set the user's value to _newItem
+                  //we use variable _newItem because it provides safe exchange to user data
+                  //on top of this, we can use this function for other values if needed
+                  //hell yea
+                },
+              ),
             ],
           ),
         ),
@@ -183,6 +198,7 @@ Future<void> showMyDialog(context, varToChange) async {
           TextButton(
             child: const Text('Change'),
             onPressed: () {
+              varToChange = "new value";
               Navigator.of(context).pop();
             },
           ),
