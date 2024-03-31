@@ -15,54 +15,56 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    _getProfile();
-    _redirect();
+    //_getProfile();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Execute _redirect after the first frame is built
+      _redirect(context);
+    });
   }
 
   Future<void> _getProfile() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data =
-        await supabase.from('profiles').select().eq('id', userId).single();
-    if (mounted) {
-      setState(() {
-        if (data['mfa_option'] != null) {
+    final userId = supabase.auth.currentUser?.id;
+    if (userId != null) {
+      final data =
+          await supabase.from('profiles').select().eq('id', userId).single();
+      if (mounted) {
+        setState(() {
           mfaOption = data['mfa_option'];
-        }
-      });
+        });
+      }
     }
+    return;
   }
 
-  Future<void> _redirect() async {
-    await Future.delayed(Duration.zero);
+  Future<void> _redirect(BuildContext context) async {
+    await _getProfile(); // Wait for _getProfile() to complete
 
     final session = supabase.auth.currentSession;
 
     if (session == null) {
+      // No active session, redirect to register
       Navigator.of(context).pushReplacementNamed('/register');
+      return;
     }
 
+    // Assuming mfaOption is properly initialized and accessible
     if (mfaOption == 2) {
+      // Navigate to the appropriate page based on MFA assurance level
       final assuranceLevelData =
           supabase.auth.mfa.getAuthenticatorAssuranceLevel();
-
-      // The user has not setup MFA yet, so send them to enroll MFA page.
       if (assuranceLevelData.currentLevel ==
           AuthenticatorAssuranceLevels.aal1) {
-        await supabase.auth.refreshSession();
-        final nextLevel =
-            supabase.auth.mfa.getAuthenticatorAssuranceLevel().nextLevel;
-        if (nextLevel == AuthenticatorAssuranceLevels.aal2) {
-          // The user has already setup MFA, but haven't login via MFA
-          // Redirect them to the verify page
-          Navigator.of(context).pushReplacementNamed('/mfaverify');
-        } else {
-          // The user has not yet setup MFA
-          // Redirect them to the enrollment page
-          Navigator.of(context).pushReplacementNamed('/mfaenroll');
-        }
+        // The user has not setup MFA yet
+        // Redirect them to the enrollment page
+        Navigator.pushReplacementNamed(context, '/mfaenroll');
+      } else {
+        // The user has already setup MFA
+        // Redirect them to the verify page
+        Navigator.pushReplacementNamed(context, '/mfaverify');
       }
     } else {
-      Navigator.of(context).pushReplacementNamed('/profile');
+      // Navigate to the default page (e.g., profile page)
+      Navigator.pushReplacementNamed(context, '/profile');
     }
   }
 

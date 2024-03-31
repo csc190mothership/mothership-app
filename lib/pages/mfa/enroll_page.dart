@@ -111,7 +111,7 @@ class _MFAEnrollPageState extends State<MFAEnrollPage> {
                     );
                     await supabase.auth.refreshSession();
                     if (mounted) {
-                      Navigator.of(context).pushReplacementNamed('/account');
+                      Navigator.of(context).pushReplacementNamed('/profile');
                     }
                   } on AuthException catch (error) {
                     ScaffoldMessenger.of(context)

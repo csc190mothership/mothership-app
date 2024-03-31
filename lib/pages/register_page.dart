@@ -1,6 +1,9 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mothership/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -102,6 +105,50 @@ class _RegisterPageState extends State<RegisterPage> {
                 }
               },
               child: const Text('Register')),
+          ElevatedButton(
+            onPressed: () async {
+              if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+                /// Web Client ID that you registered with Google Cloud.
+                const webClientId =
+                    '357859755210-g0d3308u6esm71v2jthpcflc0p2m430m.apps.googleusercontent.com';
+
+                /// iOS Client ID that you registered with Google Cloud.
+                const iosClientId =
+                    '357859755210-3a8dqcie0ripvib91cqcoiirl1lmfhb0.apps.googleusercontent.com';
+
+                final GoogleSignIn googleSignIn = GoogleSignIn(
+                  clientId: iosClientId,
+                  serverClientId: webClientId,
+                );
+                final googleUser = await googleSignIn.signIn();
+                final googleAuth = await googleUser!.authentication;
+                final accessToken = googleAuth.accessToken;
+                final idToken = googleAuth.idToken;
+
+                if (accessToken == null) {
+                  throw 'No Access Token found.';
+                }
+                if (idToken == null) {
+                  throw 'No ID Token found.';
+                }
+
+                await supabase.auth.signInWithIdToken(
+                  provider: OAuthProvider.google,
+                  idToken: idToken,
+                  accessToken: accessToken,
+                );
+
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Login successful!')));
+                  Navigator.of(context).pushReplacementNamed('/');
+                }
+              } else {
+                await supabase.auth.signInWithOAuth(OAuthProvider.google);
+              }
+            },
+            child: const Text('Login with Google'),
+          ),
           const SizedBox(height: 12),
           GestureDetector(
               onTap: () {

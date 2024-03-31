@@ -12,7 +12,15 @@ class ListMFAPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('List of MFA Factors')),
+      appBar: AppBar(
+        title: const Text('List of MFA Factors'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
+      ),
       body: FutureBuilder(
         future: _factorListFuture,
         builder: (context, snapshot) {
@@ -39,12 +47,12 @@ class ListMFAPage extends StatelessWidget {
                         builder: (context) {
                           return AlertDialog(
                             title: const Text(
-                              'Are you sure you want to delete this factor? You will be signed out of the app upon removing the factor.',
+                              'Are you sure you want to delete this?',
                             ),
                             actions: [
                               TextButton(
                                 onPressed: () {
-                                  Navigator.pushNamed(context, '/');
+                                  Navigator.of(context).pop();
                                 },
                                 child: const Text('cancel'),
                               ),
@@ -53,16 +61,16 @@ class ListMFAPage extends StatelessWidget {
                                   try {
                                     await supabase.auth.mfa.unenroll(factor.id);
                                     await supabase.auth.signOut();
-                                    if (context.mounted) {
-                                      Navigator.of(context)
-                                          .pushReplacementNamed('/register');
-                                    }
-                                  } catch (error) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content:
+                                                Text('Device signed out!')));
                                     Navigator.pushNamed(context, '/');
+                                  } catch (error) {
                                     ScaffoldMessenger.of(context)
                                         .showSnackBar(SnackBar(
                                       content: const Text(
-                                          'Permission denied! MFA disabled.'),
+                                          'Unexpected error occurred.'),
                                       backgroundColor:
                                           Theme.of(context).colorScheme.error,
                                     ));

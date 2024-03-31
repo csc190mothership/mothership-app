@@ -1,7 +1,12 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mothership/main.dart';
+import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginPage extends StatefulWidget {
@@ -24,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
     _authSubscription = supabase.auth.onAuthStateChange.listen((event) {
       final session = event.session;
       if (session != null) {
-        Navigator.of(context).pushReplacementNamed('/profile');
+        Navigator.of(context).pushReplacementNamed('/');
       }
     });
     passwordVisible = true;
@@ -91,12 +96,92 @@ class _LoginPageState extends State<LoginPage> {
                 }
               },
               child: const Text('Login')),
+          ElevatedButton(
+            onPressed: () async {
+              if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
+                /// Web Client ID that you registered with Google Cloud.
+                const webClientId =
+                    '357859755210-g0d3308u6esm71v2jthpcflc0p2m430m.apps.googleusercontent.com';
+
+                /// iOS Client ID that you registered with Google Cloud.
+                const iosClientId =
+                    '357859755210-3a8dqcie0ripvib91cqcoiirl1lmfhb0.apps.googleusercontent.com';
+
+                final GoogleSignIn googleSignIn = GoogleSignIn(
+                  clientId: iosClientId,
+                  serverClientId: webClientId,
+                );
+                final googleUser = await googleSignIn.signIn();
+                final googleAuth = await googleUser!.authentication;
+                final accessToken = googleAuth.accessToken;
+                final idToken = googleAuth.idToken;
+
+                if (accessToken == null) {
+                  throw 'No Access Token found.';
+                }
+                if (idToken == null) {
+                  throw 'No ID Token found.';
+                }
+
+                await supabase.auth.signInWithIdToken(
+                  provider: OAuthProvider.google,
+                  idToken: idToken,
+                  accessToken: accessToken,
+                );
+
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Login successful!')));
+                  Navigator.of(context).pushReplacementNamed('/');
+                }
+              } else {
+                await supabase.auth.signInWithOAuth(OAuthProvider.google);
+              }
+            },
+            child: const Text('Login with Google'),
+          ),
+          /*
+          ElevatedButton(
+            onPressed: () async {
+              final rawNonce = supabase.auth.generateRawNonce();
+              final hashedNonce =
+                  sha256.convert(utf8.encode(rawNonce)).toString();
+
+              final credential = await SignInWithApple.getAppleIDCredential(
+                scopes: [
+                  AppleIDAuthorizationScopes.email,
+                  AppleIDAuthorizationScopes.fullName,
+                ],
+                nonce: hashedNonce,
+              );
+
+              final idToken = credential.identityToken;
+              if (idToken == null) {
+                throw const AuthException(
+                    'Could not find ID Token from generated credential.');
+              }
+
+              await supabase.auth.signInWithIdToken(
+                provider: OAuthProvider.apple,
+                idToken: idToken,
+                nonce: rawNonce,
+              );
+
+              if (mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Login successful!')));
+                Navigator.of(context).pushReplacementNamed('/');
+              }
+            },
+            child: const Text('Login with Apple'),
+          ),
+          */
           const SizedBox(height: 12),
           GestureDetector(
               onTap: () {
                 Navigator.of(context).pushReplacementNamed('/register');
               },
-              child: const Text('Register?'))
+              child: const Text('Register?')),
         ],
       ),
     );

@@ -36,41 +36,43 @@ class _AccountPageState extends State<AccountPage> {
   }
 
   Future<void> _getInitialProfile() async {
-    final userId = supabase.auth.currentUser!.id;
-    final data =
-        await supabase.from('profiles').select().eq('id', userId).single();
-    setState(() {
-      if (data['first_name'] != null) {
-        _firstnameController.text = data['first_name'];
-      }
-      if (data['last_name'] != null) {
-        _lastnameController.text = data['last_name'];
-      }
-      if (data['gender'] != null) {
-        _genderController.text = data['gender'];
-      }
-      if (data['last_name'] != null) {
-        _addressoneController.text = data['address_one'];
-      }
-      if (data['first_name'] != null) {
-        _addresstwoController.text = data['address_two'];
-      }
-      if (data['last_name'] != null) {
-        _cityController.text = data['city'];
-      }
-      if (data['first_name'] != null) {
-        _regionController.text = data['region'];
-      }
-      if (data['last_name'] != null) {
-        _zipController.text = data['zip'];
-      }
-      if (data['first_name'] != null) {
-        _countryController.text = data['country'];
-      }
-      if (data['mfa_option'] != null) {
-        selectedOption = data['mfa_option'];
-      }
-    });
+    final userId = supabase.auth.currentUser?.id;
+    if (userId != null) {
+      final data =
+          await supabase.from('profiles').select().eq('id', userId).single();
+      setState(() {
+        if (data['first_name'] != null) {
+          _firstnameController.text = data['first_name'];
+        }
+        if (data['last_name'] != null) {
+          _lastnameController.text = data['last_name'];
+        }
+        if (data['gender'] != null) {
+          _genderController.text = data['gender'];
+        }
+        if (data['last_name'] != null) {
+          _addressoneController.text = data['address_one'];
+        }
+        if (data['first_name'] != null) {
+          _addresstwoController.text = data['address_two'];
+        }
+        if (data['last_name'] != null) {
+          _cityController.text = data['city'];
+        }
+        if (data['first_name'] != null) {
+          _regionController.text = data['region'];
+        }
+        if (data['last_name'] != null) {
+          _zipController.text = data['zip'];
+        }
+        if (data['first_name'] != null) {
+          _countryController.text = data['country'];
+        }
+        if (data['mfa_option'] != null) {
+          selectedOption = data['mfa_option'];
+        }
+      });
+    }
   }
 
   @override
@@ -145,7 +147,7 @@ class _AccountPageState extends State<AccountPage> {
           ListTile(
             title: const Text('Enable'),
             leading: Radio(
-                value: 1,
+                value: 2,
                 groupValue: selectedOption,
                 activeColor: Colors.red,
                 fillColor: MaterialStateProperty.all(Colors.red),
@@ -159,7 +161,7 @@ class _AccountPageState extends State<AccountPage> {
           ListTile(
             title: const Text('Disable'),
             leading: Radio(
-                value: 2,
+                value: 1,
                 groupValue: selectedOption,
                 activeColor: Colors.blue,
                 fillColor: MaterialStateProperty.all(Colors.blue),
