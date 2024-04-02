@@ -1,8 +1,7 @@
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
 import 'search.dart';
 import 'package:page_transition/page_transition.dart';
+
 class Shop extends StatefulWidget {
   @override
   _ShopState createState() => _ShopState();
