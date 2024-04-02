@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mothership/main.dart';
@@ -122,9 +121,7 @@ class VerifyOtpScreen extends StatelessWidget {
                     token: _otpController.text,
                     type: OtpType.email,
                   );
-                  ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Login successful!')));
-                  Navigator.pushNamed(context, '/');
+                  Navigator.pushReplacementNamed(context, '/');
                 } catch (err) {
                   scaffoldMessenger.showSnackBar(
                       const SnackBar(content: Text('Something went wrong')));
