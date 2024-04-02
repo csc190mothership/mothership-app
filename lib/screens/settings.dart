@@ -89,6 +89,10 @@ class _SettingsState extends State<Settings> {
 }
 
 
+//TODO:
+//ideally, make a single subpage of settings which displays an array of list items
+//OR: make the settings class just chnage the array based on which setting pressed. Probably easier? but would be harder to make look good
+
 //APPEARANCE SETTINGS
 class AppearanceSettings extends StatefulWidget {
   const AppearanceSettings({super.key});
