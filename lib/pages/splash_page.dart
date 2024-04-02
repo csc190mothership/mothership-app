@@ -42,8 +42,8 @@ class _SplashPageState extends State<SplashPage> {
     final session = supabase.auth.currentSession;
 
     if (session == null) {
-      // No active session, redirect to register
-      Navigator.pushNamed(context, '/register');
+      // No active session, redirect to login
+      Navigator.of(context).pushReplacementNamed('/login');
       return;
     }
 
@@ -56,15 +56,15 @@ class _SplashPageState extends State<SplashPage> {
           AuthenticatorAssuranceLevels.aal1) {
         // The user has not setup MFA yet
         // Redirect them to the enrollment page
-        Navigator.pushNamed(context, '/mfaenroll');
+        Navigator.of(context).pushReplacementNamed('/mfaenroll');
       } else {
         // The user has already setup MFA
         // Redirect them to the verify page
-        Navigator.pushNamed(context, '/mfaverify');
+        Navigator.of(context).pushReplacementNamed('/mfaverify');
       }
     } else {
       // Navigate to the default page (e.g., profile page)
-      Navigator.pushNamed(context, '/profile');
+      Navigator.of(context).pushReplacementNamed('/profile');
     }
   }
 

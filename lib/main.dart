@@ -4,6 +4,7 @@ import 'package:mothership/pages/login_page.dart';
 import 'package:mothership/pages/mfa/enroll_page.dart';
 import 'package:mothership/pages/mfa/list_mfa_page.dart';
 import 'package:mothership/pages/mfa/verify_page.dart';
+import 'package:mothership/pages/otp_page.dart';
 import 'package:mothership/pages/profile_page.dart';
 import 'package:mothership/pages/register_page.dart';
 import 'package:mothership/pages/splash_page.dart';
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => const SplashPage(),
         '/register': (context) => const RegisterPage(),
         '/login': (context) => const LoginPage(),
+        '/OTP': (context) => const OTPPage(),
         '/account': (context) => const AccountPage(),
         '/profile': (context) => const ProfilePage(),
         '/mfaenroll': (context) => const MFAEnrollPage(),

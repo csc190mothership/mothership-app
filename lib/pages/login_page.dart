@@ -1,12 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mothership/main.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginPage extends StatefulWidget {
@@ -140,42 +138,11 @@ class _LoginPageState extends State<LoginPage> {
             },
             child: const Text('Login with Google'),
           ),
-          /*
           ElevatedButton(
-            onPressed: () async {
-              final rawNonce = supabase.auth.generateRawNonce();
-              final hashedNonce =
-                  sha256.convert(utf8.encode(rawNonce)).toString();
-
-              final credential = await SignInWithApple.getAppleIDCredential(
-                scopes: [
-                  AppleIDAuthorizationScopes.email,
-                  AppleIDAuthorizationScopes.fullName,
-                ],
-                nonce: hashedNonce,
-              );
-
-              final idToken = credential.identityToken;
-              if (idToken == null) {
-                throw const AuthException(
-                    'Could not find ID Token from generated credential.');
-              }
-
-              await supabase.auth.signInWithIdToken(
-                provider: OAuthProvider.apple,
-                idToken: idToken,
-                nonce: rawNonce,
-              );
-
-              if (mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Login successful!')));
-                Navigator.pushNamed(context, '/');
-              }
-            },
-            child: const Text('Login with Apple'),
-          ),
-          */
+              onPressed: () async {
+                Navigator.pushNamed(context, '/OTP');
+              },
+              child: const Text('Email OTP')),
           const SizedBox(height: 12),
           GestureDetector(
               onTap: () {

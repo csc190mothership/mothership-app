@@ -147,7 +147,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 await supabase.auth.signInWithOAuth(OAuthProvider.google);
               }
             },
-            child: const Text('Login with Google'),
+            child: const Text('Register with Google'),
           ),
           const SizedBox(height: 12),
           GestureDetector(
