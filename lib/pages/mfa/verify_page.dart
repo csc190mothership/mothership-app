@@ -19,7 +19,7 @@ class _MFAVerifyPageState extends State<MFAVerifyPage> {
           TextButton(
             onPressed: () {
               supabase.auth.signOut();
-              Navigator.of(context).pushReplacementNamed('/register');
+              Navigator.pushNamed(context, '/register');
             },
             child: Text(
               'Logout',
@@ -66,7 +66,7 @@ class _MFAVerifyPageState extends State<MFAVerifyPage> {
                 );
                 await supabase.auth.refreshSession();
                 if (mounted) {
-                  Navigator.of(context).pushReplacementNamed('/profile');
+                  Navigator.pushNamed(context, '/profile');
                 }
               } on AuthException catch (error) {
                 ScaffoldMessenger.of(context)

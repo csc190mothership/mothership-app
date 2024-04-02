@@ -85,7 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       email: email,
                       password: password,
                       emailRedirectTo:
-                          'mfa-app://callback${Navigator.of(context).pushReplacementNamed('/mfaenroll')}');
+                          'mfa-app://callback${Navigator.pushNamed(context, '/mfaenroll')}');
                   if (mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Register successful!')));
@@ -141,7 +141,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Login successful!')));
-                  Navigator.of(context).pushReplacementNamed('/');
+                  Navigator.pushNamed(context, '/');
                 }
               } else {
                 await supabase.auth.signInWithOAuth(OAuthProvider.google);
@@ -152,7 +152,7 @@ class _RegisterPageState extends State<RegisterPage> {
           const SizedBox(height: 12),
           GestureDetector(
               onTap: () {
-                Navigator.of(context).pushReplacementNamed('/login');
+                Navigator.pushNamed(context, '/login');
               },
               child: const Text('Login?')),
         ],

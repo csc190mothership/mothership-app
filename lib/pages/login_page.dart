@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
     _authSubscription = supabase.auth.onAuthStateChange.listen((event) {
       final session = event.session;
       if (session != null) {
-        Navigator.of(context).pushReplacementNamed('/');
+        Navigator.pushNamed(context, '/');
       }
     });
     passwordVisible = true;
@@ -81,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                   if (mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Login successful!')));
-                    Navigator.of(context).pushReplacementNamed('/');
+                    Navigator.pushNamed(context, '/');
                   }
                 } on AuthException catch (error) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -132,7 +132,7 @@ class _LoginPageState extends State<LoginPage> {
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Login successful!')));
-                  Navigator.of(context).pushReplacementNamed('/');
+                  Navigator.pushNamed(context, '/');
                 }
               } else {
                 await supabase.auth.signInWithOAuth(OAuthProvider.google);
@@ -170,7 +170,7 @@ class _LoginPageState extends State<LoginPage> {
               if (mounted) {
                 ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(content: Text('Login successful!')));
-                Navigator.of(context).pushReplacementNamed('/');
+                Navigator.pushNamed(context, '/');
               }
             },
             child: const Text('Login with Apple'),
@@ -179,7 +179,7 @@ class _LoginPageState extends State<LoginPage> {
           const SizedBox(height: 12),
           GestureDetector(
               onTap: () {
-                Navigator.of(context).pushReplacementNamed('/register');
+                Navigator.pushNamed(context, '/register');
               },
               child: const Text('Register?')),
         ],

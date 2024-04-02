@@ -43,7 +43,7 @@ class _SplashPageState extends State<SplashPage> {
 
     if (session == null) {
       // No active session, redirect to register
-      Navigator.of(context).pushReplacementNamed('/register');
+      Navigator.pushNamed(context, '/register');
       return;
     }
 
@@ -56,15 +56,15 @@ class _SplashPageState extends State<SplashPage> {
           AuthenticatorAssuranceLevels.aal1) {
         // The user has not setup MFA yet
         // Redirect them to the enrollment page
-        Navigator.pushReplacementNamed(context, '/mfaenroll');
+        Navigator.pushNamed(context, '/mfaenroll');
       } else {
         // The user has already setup MFA
         // Redirect them to the verify page
-        Navigator.pushReplacementNamed(context, '/mfaverify');
+        Navigator.pushNamed(context, '/mfaverify');
       }
     } else {
       // Navigate to the default page (e.g., profile page)
-      Navigator.pushReplacementNamed(context, '/profile');
+      Navigator.pushNamed(context, '/profile');
     }
   }
 

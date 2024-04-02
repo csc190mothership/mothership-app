@@ -198,7 +198,7 @@ class _AccountPageState extends State<AccountPage> {
                   'mfa_option': selectedOption,
                 }).eq('id', userId);
                 if (mounted) {
-                  Navigator.of(context).pushReplacementNamed('/verifyemail');
+                  Navigator.pushNamed(context, '/verifyemail');
                 }
                 /*
                 // Give user a saved message
