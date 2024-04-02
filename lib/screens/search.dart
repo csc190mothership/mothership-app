@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mothership/screens/item.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class Search extends StatefulWidget {
@@ -6,6 +7,7 @@ class Search extends StatefulWidget {
   _SearchState createState() => _SearchState();
 }
 
+final Item testItem = Item("Test Item", "This is a test item", "https://bradynorum.com/images/myoldface.png", 20.00 as double); 
 class _SearchState extends State<Search> {
   final TextEditingController _searchController = TextEditingController();
   var searchResults = <Widget>[Container()];
@@ -19,14 +21,13 @@ class _SearchState extends State<Search> {
           cursorColor: Colors.black,
           decoration: const InputDecoration(
             hintText: 'Search...',
-            hintStyle: TextStyle(color: Colors.white54),
             border: InputBorder.none,
           ),
           onChanged: (value) {
             print(value);
             //TODO: text field queries api, then sets searchResults to the results
             //right now just has a placeholder which comes up at todays date
-            if (value == "04022024") searchResults = [searchItem('https://bradynorum.com/images/myoldface.png','Today\'s Example Item', "9.10")];
+            if (value == "04022024") searchResults = [searchItem(testItem)];
             if (value == "") searchResults = [];
             setState(() {});
           },
@@ -38,17 +39,24 @@ class _SearchState extends State<Search> {
       
     );
   }
-}
 
-Widget searchItem(String imgUrl, String title, String price) {
-  return ListTile(
-    leading: FadeInImage.memoryNetwork(
-      placeholder: kTransparentImage,
-      image: imgUrl,
-    ), //this fade in image allows us to load images in 3 lines. living in the future.
-    title: Text(title),
-    subtitle: Text("\$$price"), //sociopath iterpolation notation
-    onTap: () {print("sorry i havent implemented an item page yet");} //TODO: navigate to item page
-    //basically push a custom page with item deets. make a new file :D
-  );
+
+  Widget searchItem(Item item) {
+    return ListTile(
+      leading: FadeInImage.memoryNetwork(
+        placeholder: kTransparentImage,
+        image: item.imgPath,
+      ), //this fade in image allows us to load images in 3 lines. living in the future.
+      title: Text(item.name),
+      subtitle: Text("\$" + (item.price).toString()), //sociopath iterpolation notation
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => ShopItem(item: item)),
+        );
+      }
+      //basically push a custom page with item deets. make a new file :D
+    );
+  }
+
 }
