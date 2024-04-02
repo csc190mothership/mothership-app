@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mothership/main.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+class AccountPage extends StatefulWidget {
+  const AccountPage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<AccountPage> createState() => _AccountPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
+class _AccountPageState extends State<AccountPage> {
   final _firstnameController = TextEditingController();
   final _lastnameController = TextEditingController();
   final _genderController = TextEditingController();
@@ -40,40 +40,38 @@ class _ProfilePageState extends State<ProfilePage> {
     if (userId != null) {
       final data =
           await supabase.from('profiles').select().eq('id', userId).single();
-      if (mounted) {
-        setState(() {
-          if (data['first_name'] != null) {
-            _firstnameController.text = data['first_name'];
-          }
-          if (data['last_name'] != null) {
-            _lastnameController.text = data['last_name'];
-          }
-          if (data['gender'] != null) {
-            _genderController.text = data['gender'];
-          }
-          if (data['last_name'] != null) {
-            _addressoneController.text = data['address_one'];
-          }
-          if (data['first_name'] != null) {
-            _addresstwoController.text = data['address_two'];
-          }
-          if (data['last_name'] != null) {
-            _cityController.text = data['city'];
-          }
-          if (data['first_name'] != null) {
-            _regionController.text = data['region'];
-          }
-          if (data['last_name'] != null) {
-            _zipController.text = data['zip'];
-          }
-          if (data['first_name'] != null) {
-            _countryController.text = data['country'];
-          }
-          if (data['mfa_option'] != null) {
-            selectedOption = data['mfa_option'];
-          }
-        });
-      }
+      setState(() {
+        if (data['first_name'] != null) {
+          _firstnameController.text = data['first_name'];
+        }
+        if (data['last_name'] != null) {
+          _lastnameController.text = data['last_name'];
+        }
+        if (data['gender'] != null) {
+          _genderController.text = data['gender'];
+        }
+        if (data['last_name'] != null) {
+          _addressoneController.text = data['address_one'];
+        }
+        if (data['first_name'] != null) {
+          _addresstwoController.text = data['address_two'];
+        }
+        if (data['last_name'] != null) {
+          _cityController.text = data['city'];
+        }
+        if (data['first_name'] != null) {
+          _regionController.text = data['region'];
+        }
+        if (data['last_name'] != null) {
+          _zipController.text = data['zip'];
+        }
+        if (data['first_name'] != null) {
+          _countryController.text = data['country'];
+        }
+        if (data['mfa_option'] != null) {
+          selectedOption = data['mfa_option'];
+        }
+      });
     }
   }
 
@@ -81,11 +79,15 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile'),
+        title: const Text('Account Setup'),
       ),
       body: ListView(
         padding: const EdgeInsets.all(10),
         children: [
+          const Text(
+            'Enter your personal information to finish registration.',
+            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
           TextFormField(
             controller: _firstnameController,
             decoration: const InputDecoration(
@@ -150,7 +152,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 activeColor: Colors.red,
                 fillColor: MaterialStateProperty.all(Colors.red),
                 splashRadius: 20,
-                onChanged: (val) {}),
+                onChanged: (val) {
+                  setState(() {
+                    selectedOption = val!;
+                  });
+                }),
           ),
           ListTile(
             title: const Text('Disable'),
@@ -160,21 +166,55 @@ class _ProfilePageState extends State<ProfilePage> {
                 activeColor: Colors.blue,
                 fillColor: MaterialStateProperty.all(Colors.blue),
                 splashRadius: 25,
-                onChanged: (val) {}),
+                onChanged: (val) {
+                  setState(() {
+                    selectedOption = val!;
+                  });
+                }),
           ),
-          //Edit Profile
+          const SizedBox(height: 12),
           ElevatedButton(
               onPressed: () async {
+                final firstname = _firstnameController.text.trim();
+                final lastname = _lastnameController.text.trim();
+                final gender = _genderController.text.trim();
+                final mainaddress = _addressoneController.text.trim();
+                final secondaryaddress = _addresstwoController.text.trim();
+                final city = _cityController.text.trim();
+                final region = _regionController.text.trim();
+                final zip = _zipController.text.trim();
+                final country = _countryController.text.trim();
+                final userId = supabase.auth.currentUser!.id;
+                await supabase.from('profiles').update({
+                  'first_name': firstname,
+                  'last_name': lastname,
+                  'gender': gender,
+                  'address_one': mainaddress,
+                  'address_two': secondaryaddress,
+                  'city': city,
+                  'region': region,
+                  'zip': zip,
+                  'country': country,
+                  'mfa_option': selectedOption,
+                }).eq('id', userId);
                 if (mounted) {
-                  Navigator.pushNamed(context, '/account');
+                  Navigator.of(context).pushReplacementNamed('/verifyemail');
                 }
+                /*
+                // Give user a saved message
+                if (mounted) {
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(const SnackBar(content: Text('Saved!')));
+                }
+                */
               },
-              child: const Text('Edit')),
+              child: const Text('Continue')),
+          /* 
           //Navigate to MFA device list
           ElevatedButton(
               onPressed: () async {
                 if (mounted) {
-                  Navigator.pushNamed(context, '/listmfa');
+                  Navigator.of(context).pushReplacementNamed('/listmfa');
                 }
               },
               child: const Text('MFA List')),
@@ -185,10 +225,11 @@ class _ProfilePageState extends State<ProfilePage> {
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Sign out successful!')));
-                  Navigator.pushNamed(context, '/login');
+                  Navigator.of(context).pushReplacementNamed('/register');
                 }
               },
               child: const Text('Sign Out')),
+          */
         ],
       ),
     );

@@ -23,7 +23,7 @@ class _MFAEnrollPageState extends State<MFAEnrollPage> {
           TextButton(
             onPressed: () {
               supabase.auth.signOut();
-              Navigator.pushNamed(context, '/register');
+              Navigator.of(context).pushReplacementNamed('/register');
             },
             child: Text(
               'Logout',
@@ -111,7 +111,7 @@ class _MFAEnrollPageState extends State<MFAEnrollPage> {
                     );
                     await supabase.auth.refreshSession();
                     if (mounted) {
-                      Navigator.pushNamed(context, '/profile');
+                      Navigator.of(context).pushReplacementNamed('/');
                     }
                   } on AuthException catch (error) {
                     ScaffoldMessenger.of(context)
@@ -122,6 +122,20 @@ class _MFAEnrollPageState extends State<MFAEnrollPage> {
                   }
                 },
               ),
+              const SizedBox(
+                height: 12,
+              ),
+              //Sign out user
+              ElevatedButton(
+                  onPressed: () async {
+                    await supabase.auth.signOut();
+                    if (mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text('Sign out successful!')));
+                      Navigator.of(context).pushReplacementNamed('/login');
+                    }
+                  },
+                  child: const Text('Sign Out')),
             ],
           );
         },

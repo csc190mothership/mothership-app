@@ -7,26 +7,19 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:mothership/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class RegisterPage extends StatefulWidget {
-  const RegisterPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<RegisterPage> createState() => _RegisterPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _RegisterPageState extends State<RegisterPage> {
+class _LoginPageState extends State<LoginPage> {
   bool passwordVisible = false;
 
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   late final StreamSubscription<AuthState> _authSubscription;
-
-  void verifyEmail() {
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Email Verification Sent!')));
-    }
-  }
 
   @override
   void initState() {
@@ -34,7 +27,7 @@ class _RegisterPageState extends State<RegisterPage> {
     _authSubscription = supabase.auth.onAuthStateChange.listen((event) {
       final session = event.session;
       if (session != null) {
-        Navigator.of(context).pushReplacementNamed('/account');
+        Navigator.of(context).pushReplacementNamed('/');
       }
     });
     passwordVisible = true;
@@ -51,7 +44,7 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Register')),
+      appBar: AppBar(title: const Text('Login')),
       body: ListView(
         padding: const EdgeInsets.all(12),
         children: [
@@ -81,16 +74,12 @@ class _RegisterPageState extends State<RegisterPage> {
                 try {
                   final email = _emailController.text.trim();
                   final password = _passwordController.text.trim();
-                  await supabase.auth.signUp(
-                      email: email,
-                      password: password,
-                      emailRedirectTo:
-                          'mfa-app://callback${Navigator.pushNamed(context, '/mfaenroll')}');
+                  await supabase.auth
+                      .signInWithPassword(email: email, password: password);
                   if (mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Register successful!')));
-                    Timer(const Duration(seconds: 3), verifyEmail);
-                    //Navigator.of(context).pushReplacementNamed('/account');
+                        const SnackBar(content: Text('Login successful!')));
+                    Navigator.of(context).pushReplacementNamed('/');
                   }
                 } on AuthException catch (error) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
@@ -104,7 +93,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ));
                 }
               },
-              child: const Text('Register')),
+              child: const Text('Login')),
           ElevatedButton(
             onPressed: () async {
               if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
@@ -141,20 +130,30 @@ class _RegisterPageState extends State<RegisterPage> {
                 if (mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                       const SnackBar(content: Text('Login successful!')));
-                  Navigator.pushNamed(context, '/');
+                  Navigator.of(context).pushReplacementNamed('/profile');
                 }
               } else {
                 await supabase.auth.signInWithOAuth(OAuthProvider.google);
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Login successful!')));
+                  Navigator.of(context).pushReplacementNamed('/profile');
+                }
               }
             },
-            child: const Text('Register with Google'),
+            child: const Text('Login with Google'),
           ),
+          ElevatedButton(
+              onPressed: () async {
+                Navigator.pushNamed(context, '/OTP');
+              },
+              child: const Text('Email OTP')),
           const SizedBox(height: 12),
           GestureDetector(
               onTap: () {
-                Navigator.pushNamed(context, '/login');
+                Navigator.of(context).pushReplacementNamed('/register');
               },
-              child: const Text('Login?')),
+              child: const Text('Register?')),
         ],
       ),
     );

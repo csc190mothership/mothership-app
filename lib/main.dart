@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:mothership/pages/account_page.dart';
-import 'package:mothership/pages/login_page.dart';
+import 'package:mothership/pages/first_time_user/account_page.dart';
+import 'package:mothership/pages/user_profile/editprofile_page.dart';
+import 'package:mothership/pages/auth/login_page.dart';
 import 'package:mothership/pages/mfa/enroll_page.dart';
 import 'package:mothership/pages/mfa/list_mfa_page.dart';
 import 'package:mothership/pages/mfa/verify_page.dart';
-import 'package:mothership/pages/otp_page.dart';
-import 'package:mothership/pages/profile_page.dart';
-import 'package:mothership/pages/register_page.dart';
-import 'package:mothership/pages/splash_page.dart';
-import 'package:mothership/pages/verifyemail_page.dart';
+import 'package:mothership/pages/auth/otp_page.dart';
+import 'package:mothership/pages/user_profile/profile_page.dart';
+import 'package:mothership/pages/auth/register_page.dart';
+import 'package:mothership/pages/auth/splash_page.dart';
+import 'package:mothership/pages/first_time_user/verifyemail_page.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'services/kroger_services.dart';
@@ -45,6 +46,7 @@ class MyApp extends StatelessWidget {
         '/OTP': (context) => const OTPPage(),
         '/account': (context) => const AccountPage(),
         '/profile': (context) => const ProfilePage(),
+        '/editprofile': (context) => const EditProfilePage(),
         '/mfaenroll': (context) => const MFAEnrollPage(),
         '/mfaverify': (context) => const MFAVerifyPage(),
         '/listmfa': (context) => ListMFAPage(),

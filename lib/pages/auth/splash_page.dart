@@ -56,7 +56,7 @@ class _SplashPageState extends State<SplashPage> {
           AuthenticatorAssuranceLevels.aal1) {
         // The user has not setup MFA yet
         // Redirect them to the enrollment page
-        Navigator.of(context).pushReplacementNamed('/mfaenroll');
+        Navigator.of(context).pushReplacementNamed('/mfaverify');
       } else {
         // The user has already setup MFA
         // Redirect them to the verify page

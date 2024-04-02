@@ -19,7 +19,7 @@ class _MFAVerifyPageState extends State<MFAVerifyPage> {
           TextButton(
             onPressed: () {
               supabase.auth.signOut();
-              Navigator.pushNamed(context, '/register');
+              Navigator.of(context).pushReplacementNamed('/register');
             },
             child: Text(
               'Logout',
@@ -66,7 +66,7 @@ class _MFAVerifyPageState extends State<MFAVerifyPage> {
                 );
                 await supabase.auth.refreshSession();
                 if (mounted) {
-                  Navigator.pushNamed(context, '/profile');
+                  Navigator.of(context).pushReplacementNamed('/profile');
                 }
               } on AuthException catch (error) {
                 ScaffoldMessenger.of(context)
@@ -77,6 +77,20 @@ class _MFAVerifyPageState extends State<MFAVerifyPage> {
               }
             },
           ),
+          const SizedBox(
+            height: 12,
+          ),
+          //Sign out user
+          ElevatedButton(
+              onPressed: () async {
+                await supabase.auth.signOut();
+                if (mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Sign out successful!')));
+                  Navigator.of(context).pushReplacementNamed('/login');
+                }
+              },
+              child: const Text('Sign Out')),
         ],
       ),
     );

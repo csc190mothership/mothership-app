@@ -3,14 +3,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mothership/main.dart';
 
-class AccountPage extends StatefulWidget {
-  const AccountPage({super.key});
+class EditProfilePage extends StatefulWidget {
+  const EditProfilePage({super.key});
 
   @override
-  State<AccountPage> createState() => _AccountPageState();
+  State<EditProfilePage> createState() => _EditProfilePageState();
 }
 
-class _AccountPageState extends State<AccountPage> {
+class _EditProfilePageState extends State<EditProfilePage> {
   final _firstnameController = TextEditingController();
   final _lastnameController = TextEditingController();
   final _genderController = TextEditingController();
@@ -79,15 +79,11 @@ class _AccountPageState extends State<AccountPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Account Setup'),
+        title: const Text('Edit Profile'),
       ),
       body: ListView(
         padding: const EdgeInsets.all(10),
         children: [
-          const Text(
-            'Enter your personal information to finish registration.',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
           TextFormField(
             controller: _firstnameController,
             decoration: const InputDecoration(
@@ -198,7 +194,7 @@ class _AccountPageState extends State<AccountPage> {
                   'mfa_option': selectedOption,
                 }).eq('id', userId);
                 if (mounted) {
-                  Navigator.pushNamed(context, '/verifyemail');
+                  Navigator.pushNamed(context, '/profile');
                 }
                 /*
                 // Give user a saved message
@@ -208,7 +204,7 @@ class _AccountPageState extends State<AccountPage> {
                 }
                 */
               },
-              child: const Text('Continue')),
+              child: const Text('Save')),
           /* 
           //Navigate to MFA device list
           ElevatedButton(

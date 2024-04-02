@@ -19,7 +19,7 @@ class VerifyEmailPage extends StatelessWidget {
           ),
           ElevatedButton(
               onPressed: () {
-                Navigator.pushNamed(context, '/login');
+                Navigator.of(context).pushReplacementNamed('/login');
               },
               child: const Text('Go to Login')),
         ],
