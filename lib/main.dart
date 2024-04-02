@@ -65,7 +65,7 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.shopping_cart),
+            icon: Icon(Icons.fastfood),
             label: 'Shop',
           ),
           BottomNavigationBarItem(

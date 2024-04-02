@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:flutter/material.dart';
 import 'search.dart';
 import 'package:page_transition/page_transition.dart';
@@ -25,6 +27,12 @@ class _ShopState extends State<Shop> {
       body: Container(
         //TODO: SHOP UI
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          //TODO: route to cart
+        },
+        child: const Icon(Icons.shopping_cart),
+      )
     );
   }
   
