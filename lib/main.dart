@@ -4,6 +4,8 @@ import 'dart:io';
 import 'screens/settings.dart';
 import 'screens/debughome.dart';
 import 'screens/register.dart';
+import 'screens/shop.dart';
+import 'screens/search.dart';
 import 'package:provider/provider.dart';
 import 'themeprovider.dart';
 
@@ -22,6 +24,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: Provider.of<ThemeProvider>(context).getTheme(),
       home: const MyHomePage(),
@@ -47,8 +50,8 @@ class _MyHomePageState extends State<MyHomePage> {
 
   final _pageOptions = [
     debugHome(),
+    Shop(),
     Settings(),
-    Register(),
   ];
 
   @override
@@ -62,9 +65,14 @@ class _MyHomePageState extends State<MyHomePage> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.fastfood),
+            label: 'Shop',
+          ),
+          BottomNavigationBarItem(
             icon: Icon(Icons.settings),
             label: 'Settings',
           ),
+          
         ],
         currentIndex: _selectedPage,
         onTap: _onItemTapped,
