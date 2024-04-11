@@ -8,14 +8,12 @@ import 'screens/shop.dart';
 import 'screens/search.dart';
 import 'package:provider/provider.dart';
 import 'themeprovider.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
-  runApp(
-   ChangeNotifierProvider(
-    create: (context) => ThemeProvider(),
-    child: const MyApp()
-    )
-  );
+void main() async {
+  await dotenv.load(fileName: ".env");
+  runApp(ChangeNotifierProvider(
+      create: (context) => ThemeProvider(), child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -72,11 +70,10 @@ class _MyHomePageState extends State<MyHomePage> {
             icon: Icon(Icons.settings),
             label: 'Settings',
           ),
-          
         ],
         currentIndex: _selectedPage,
         onTap: _onItemTapped,
-      ), 
+      ),
     );
   }
 }
