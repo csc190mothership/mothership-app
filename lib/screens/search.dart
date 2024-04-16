@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-//import 'package:mothership/screens/item.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../utilities/kroger-services.dart';
 import '../utilities/product.dart';
@@ -65,16 +65,6 @@ class _SearchState extends State<Search> {
             hintText: 'Search...',
             border: InputBorder.none,
           ),
-          // onChanged: (value) {
-          //   print(value);
-          //   //TODO: text field queries api, then sets searchResults to the results
-          //   //right now just has a placeholder which comes up at todays date
-          //   //_fetchData();
-          //   //if (value == "04022024") searchResults = [searchItem(testItem)];
-          //   //if (value == "") searchResults = [];
-          //   searchResults = _products.map((item) => searchItem(item)).toList();
-          //   setState(() {});
-          // },
         ),
       ),
       body: ListView.builder(
@@ -91,17 +81,16 @@ class _SearchState extends State<Search> {
         leading: FadeInImage.memoryNetwork(
           placeholder: kTransparentImage,
           image: item.imageURL,
+          width: 50,
         ), //this fade in image allows us to load images in 3 lines. living in the future.
         title: Text(item.name),
-        subtitle: Text(
-            "\$" + (item.price).toString()), //sociopath iterpolation notation
+        subtitle: Text("\$" + (item.price).toString()),
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ShopItem(item: item)),
+            PageTransition(type: PageTransitionType.fade, child:ShopItem(item:item))
           );
         }
-        //basically push a custom page with item deets. make a new file :D
         );
   }
 }

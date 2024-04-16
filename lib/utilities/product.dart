@@ -62,9 +62,12 @@ class _ShopItemState extends State<ShopItem> {
       ),
       body: Column(
         children: [
-          FadeInImage.memoryNetwork(
-            placeholder: kTransparentImage,
-            image: _item.imageURL,
+          SizedBox(height: 20),
+          Center(child:
+            FadeInImage.memoryNetwork(
+              placeholder: kTransparentImage,
+              image: _item.imageURL,
+            )
           ),
           Text("\$" + (_item.price).toString()),
         ],
