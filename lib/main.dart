@@ -1,27 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:mothership/pages/first_time_user/account_page.dart';
-import 'package:mothership/pages/user_profile/editprofile_page.dart';
-import 'package:mothership/pages/auth/login_page.dart';
-import 'package:mothership/pages/mfa/enroll_page.dart';
-import 'package:mothership/pages/mfa/list_mfa_page.dart';
-import 'package:mothership/pages/mfa/verify_page.dart';
-import 'package:mothership/pages/auth/otp_page.dart';
-import 'package:mothership/pages/user_profile/profile_page.dart';
-import 'package:mothership/pages/auth/register_page.dart';
-import 'package:mothership/pages/auth/splash_page.dart';
-import 'package:mothership/pages/first_time_user/verifyemail_page.dart';
+import 'package:mothership/pages/login.dart';
+import 'package:mothership/pages/newpassword.dart';
+import 'package:mothership/pages/profile.dart';
+import 'package:mothership/pages/register.dart';
+import 'package:mothership/pages/resetpassword.dart';
+import 'package:mothership/pages/setupaccount.dart';
+import 'package:mothership/pages/splash.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'services/kroger_services.dart';
 
-void main() async {
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   await Supabase.initialize(
     url: 'https://ptxjscxersbcxjkrygve.supabase.co',
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0eGpzY3hlcnNiY3hqa3J5Z3ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDkwNTI3MDMsImV4cCI6MjAyNDYyODcwM30.tkam8fZ888I7DpSBPZC_dQyy1qr0vgPS3p_uHU5GEBs',
   );
-  //await dotenv.load(fileName: ".env");
-
   runApp(const MyApp());
 }
 
@@ -33,24 +27,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Mothership',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
+      debugShowCheckedModeBanner: true,
       initialRoute: '/',
       routes: {
         '/': (context) => const SplashPage(),
         '/register': (context) => const RegisterPage(),
         '/login': (context) => const LoginPage(),
-        '/OTP': (context) => const OTPPage(),
-        '/account': (context) => const AccountPage(),
+        '/account': (context) => const AccountSetupPage(),
         '/profile': (context) => const ProfilePage(),
-        '/editprofile': (context) => const EditProfilePage(),
-        '/mfaenroll': (context) => const MFAEnrollPage(),
-        '/mfaverify': (context) => const MFAVerifyPage(),
-        '/listmfa': (context) => ListMFAPage(),
-        '/verifyemail': (context) => const VerifyEmailPage(),
+        '/resetpassword': (context) => const ResetPasswordPage(),
+        '/newpassword': (context) => const NewPasswordPage(),
       },
     );
   }

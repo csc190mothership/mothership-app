@@ -2,6 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+	<dict>
+		<key>CFBundleTypeRole</key>
+		<string>Editor</string>
+		<key>CFBundleURLSchemes</key>
+		<array>
+		<string>io.supabase.flutterquickstart</string>
+		</array>
+	</dict>
+	</array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+	<string>googlegmail</string>
+	<string>x-dispatch</string>
+	<string>readdle-spark</string>
+	<string>airmail</string>
+	<string>ms-outlook</string>
+	<string>ymail</string>
+	<string>fastmail</string>
+	<string>superhuman</string>
+	<string>protonmail</string>
+	</array>
+
 	<!-- Deep Links -->
 	<key>FlutterDeepLinkingEnabled</key>
 	<true/>
@@ -16,18 +40,6 @@
         </array>
       </dict>
     </array>
-		<!-- Deep Links -->
-	<key>CFBundleURLTypes</key>
-  	<array>
-    	<dict>
-      	<key>CFBundleTypeRole</key>
-      	<string>Editor</string>
-      	<key>CFBundleURLSchemes</key>
-      	<array>
-        	<string>io.supabase.flutterquickstart</string>
-      	</array>
-    	</dict>
-  	</array>
 
 	<!-- Google Sign-in Section -->
 	<key>CFBundleURLTypes</key>
