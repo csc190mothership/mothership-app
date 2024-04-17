@@ -48,6 +48,7 @@ class _AccountSetupPageState extends State<AccountSetupPage> {
         'region': region,
         'zip': zip,
         'country': country,
+        'new_user': 0,
       }).eq('id', userId);
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

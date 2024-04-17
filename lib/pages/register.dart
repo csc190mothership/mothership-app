@@ -26,6 +26,31 @@ class _RegisterPageState extends State<RegisterPage> {
 
   late final StreamSubscription<AuthState> _authStateSubscription;
 
+  Future<void> isNewUser() async {
+    try {
+      final userId = supabase.auth.currentUser?.id;
+      if (userId != null) {
+        final data =
+            await supabase.from('profiles').select().eq('id', userId).single();
+        if (mounted) {
+          setState(() {
+            if (data['new_user'] == 1) {
+              Navigator.of(context).pushReplacementNamed('/account');
+            } else {
+              Navigator.of(context).pushReplacementNamed('/profile');
+            }
+          });
+        }
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Unexpected error occurred.')),
+      );
+      await supabase.auth.signOut();
+      Navigator.of(context).pushReplacementNamed('/');
+    }
+  }
+
   bool isEmailValid(String email) {
     String emailPattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
     RegExp regExp = RegExp(emailPattern);
@@ -148,7 +173,7 @@ class _RegisterPageState extends State<RegisterPage> {
       final session = data.session;
       if (session != null) {
         _redirecting = true;
-        Navigator.of(context).pushReplacementNamed('/account');
+        isNewUser();
       }
     });
     super.initState();
