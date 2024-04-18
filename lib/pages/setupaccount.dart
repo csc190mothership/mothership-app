@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mothership/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -21,7 +22,8 @@ class _AccountSetupPageState extends State<AccountSetupPage> {
   final TextEditingController _cityController = TextEditingController();
   final TextEditingController _regionController = TextEditingController();
   final TextEditingController _zipController = TextEditingController();
-  final TextEditingController _countryController = TextEditingController();
+  final TextEditingController _countryController =
+      TextEditingController(text: "USA");
 
   Future<void> updateUser() async {
     final firstname = _firstNameController.text.trim();
@@ -34,6 +36,7 @@ class _AccountSetupPageState extends State<AccountSetupPage> {
     final zip = _zipController.text.trim();
     final country = _countryController.text.trim();
     final userId = supabase.auth.currentUser!.id;
+
     try {
       setState(() {
         _isLoading = true;
@@ -121,6 +124,10 @@ class _AccountSetupPageState extends State<AccountSetupPage> {
                         controller: _firstNameController,
                         decoration:
                             const InputDecoration(labelText: 'First Name'),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(
+                              r'[a-zA-Z]')), // Allow only alphabetical characters
+                        ],
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -129,6 +136,10 @@ class _AccountSetupPageState extends State<AccountSetupPage> {
                         controller: _lastNameController,
                         decoration:
                             const InputDecoration(labelText: 'Last Name'),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(
+                              r'[a-zA-Z]')), // Allow only alphabetical characters
+                        ],
                       ),
                     ),
                   ],
@@ -137,6 +148,10 @@ class _AccountSetupPageState extends State<AccountSetupPage> {
                 TextField(
                   controller: _genderController,
                   decoration: const InputDecoration(labelText: 'Gender'),
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp(
+                        r'[a-zA-Z]')), // Allow only alphabetical characters
+                  ],
                 ),
                 const SizedBox(height: 20),
                 TextField(
@@ -156,13 +171,22 @@ class _AccountSetupPageState extends State<AccountSetupPage> {
                       child: TextField(
                         controller: _cityController,
                         decoration: const InputDecoration(labelText: 'City'),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(
+                              r'[a-zA-Z\s]')), // Allow alphabetical characters and space
+                        ],
                       ),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: TextField(
+                        maxLength: 2,
                         controller: _regionController,
-                        decoration: const InputDecoration(labelText: 'Region'),
+                        decoration: const InputDecoration(labelText: 'State'),
+                        inputFormatters: [
+                          FilteringTextInputFormatter.allow(RegExp(
+                              r'[a-zA-Z]')), // Allow only alphabetical characters
+                        ],
                       ),
                     ),
                   ],
@@ -172,13 +196,16 @@ class _AccountSetupPageState extends State<AccountSetupPage> {
                   children: <Widget>[
                     Expanded(
                       child: TextField(
+                        maxLength: 5,
                         controller: _zipController,
                         decoration: const InputDecoration(labelText: 'Zip'),
+                        keyboardType: TextInputType.number,
                       ),
                     ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: TextField(
+                        readOnly: true,
                         controller: _countryController,
                         decoration: const InputDecoration(labelText: 'Country'),
                       ),
