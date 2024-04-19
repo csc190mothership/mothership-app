@@ -1,8 +1,6 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:mothership/functions.dart';
 import 'package:mothership/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -23,171 +21,6 @@ class _LoginPageState extends State<LoginPage> {
 
   late final StreamSubscription<AuthState> _authStateSubscription;
 
-  Future<void> isNewUser() async {
-    try {
-      final userId = supabase.auth.currentUser?.id;
-      if (userId != null) {
-        final data =
-            await supabase.from('profiles').select().eq('id', userId).single();
-        if (mounted) {
-          setState(() {
-            if (data['new_user'] == 1) {
-              Navigator.of(context).pushReplacementNamed('/account');
-            } else {
-              Navigator.of(context).pushReplacementNamed('/profile');
-            }
-          });
-        }
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Unexpected error occurred.')),
-      );
-      await supabase.auth.signOut();
-      Navigator.of(context).pushReplacementNamed('/');
-    }
-  }
-
-  bool isEmailValid(String email) {
-    String emailPattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
-    RegExp regExp = RegExp(emailPattern);
-    return regExp.hasMatch(email);
-  }
-
-  Future<void> signInWithEmail() async {
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-      await supabase.auth.signInWithPassword(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim());
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Login Successful!')),
-        );
-        _emailController.clear();
-        _passwordController.clear();
-      }
-    } on AuthException {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content:
-                Text('Try again. If unsuccessful, account may not exist.')),
-      );
-    } catch (error) {
-      SnackBar(
-        content: const Text('Unexpected error occurred'),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      );
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
-  Future<void> signInWithEmailLink() async {
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-      await supabase.auth.signInWithOtp(
-        email: _emailController.text.trim(),
-        emailRedirectTo:
-            kIsWeb ? null : 'io.supabase.flutterquickstart://login-callback/',
-        shouldCreateUser: false,
-      );
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Check your email for a login link!')),
-        );
-        _emailController.clear();
-      }
-    } on AuthException {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content:
-                Text('Try again. If unsuccessful, account may not exist.')),
-      );
-    } catch (error) {
-      SnackBar(
-        content: const Text('Unexpected error occurred'),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      );
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
-  Future<void> google() async {
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-      /// Web Client ID that you registered with Google Cloud.
-      const webClientId =
-          '357859755210-g0d3308u6esm71v2jthpcflc0p2m430m.apps.googleusercontent.com';
-
-      /// iOS Client ID that you registered with Google Cloud.
-      const iosClientId =
-          '357859755210-3a8dqcie0ripvib91cqcoiirl1lmfhb0.apps.googleusercontent.com';
-
-      final GoogleSignIn googleSignIn = GoogleSignIn(
-        clientId: iosClientId,
-        serverClientId: webClientId,
-      );
-      final googleUser = await googleSignIn.signIn();
-      final googleAuth = await googleUser!.authentication;
-      final accessToken = googleAuth.accessToken;
-      final idToken = googleAuth.idToken;
-
-      if (accessToken == null) {
-        throw 'No Access Token found.';
-      }
-      if (idToken == null) {
-        throw 'No ID Token found.';
-      }
-
-      try {
-        setState(() {
-          _isLoading = true;
-        });
-        await supabase.auth.signInWithIdToken(
-          provider: OAuthProvider.google,
-          idToken: idToken,
-          accessToken: accessToken,
-        );
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Registration Successful!')),
-          );
-        } else {
-          await supabase.auth.signInWithOAuth(OAuthProvider.google);
-        }
-      } on AuthException {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Unable to register. Account may already exist.')),
-        );
-      } catch (error) {
-        SnackBar(
-          content: const Text('Unexpected error occurred'),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        );
-      } finally {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-        }
-      }
-    }
-  }
-
   @override
   void initState() {
     _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
@@ -195,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
       final session = data.session;
       if (session != null) {
         _redirecting = true;
-        isNewUser();
+        Functions.isNewUser(context);
       }
     });
     super.initState();
@@ -282,8 +115,8 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {
-                    if (!isEmailValid(_emailController.text)) {
+                  onPressed: () async {
+                    if (!Functions.isEmailValid(_emailController.text)) {
                       // Show error message for invalid email format
                       showDialog(
                         context: context,
@@ -303,7 +136,21 @@ class _LoginPageState extends State<LoginPage> {
                         },
                       );
                     } else {
-                      _isLoading ? null : signInWithEmail();
+                      if (!_isLoading) {
+                        try {
+                          await Functions.signInWithEmail(
+                              context,
+                              _emailController,
+                              _passwordController,
+                              _isLoading);
+                        } finally {
+                          setState(() {
+                            _isLoading = false; // Set loading state to false
+                          });
+                          _emailController.clear();
+                          _passwordController.clear();
+                        }
+                      }
                     }
                   },
                   style: ElevatedButton.styleFrom(
@@ -323,8 +170,21 @@ class _LoginPageState extends State<LoginPage> {
                     Column(
                       children: [
                         ElevatedButton(
-                          onPressed: () {
-                            _isLoading ? null : google();
+                          onPressed: () async {
+                            if (!_isLoading) {
+                              setState(() {
+                                _isLoading = true; // Set loading state to true
+                              });
+                              try {
+                                // Call the google function from functions.dart
+                                await Functions.google(context, _isLoading);
+                              } finally {
+                                setState(() {
+                                  _isLoading =
+                                      false; // Set loading state to false
+                                });
+                              }
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             foregroundColor: Colors.white,
@@ -332,14 +192,15 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           child:
                               Text(_isLoading ? 'Loading' : 'Google Sign In'),
-                        ),
+                        )
                       ],
                     ),
                     Column(
                       children: [
                         ElevatedButton(
-                          onPressed: () {
-                            if (!isEmailValid(_emailController.text)) {
+                          onPressed: () async {
+                            if (!Functions.isEmailValid(
+                                _emailController.text)) {
                               // Show error message for invalid email format
                               showDialog(
                                 context: context,
@@ -359,7 +220,21 @@ class _LoginPageState extends State<LoginPage> {
                                 },
                               );
                             } else {
-                              _isLoading ? null : signInWithEmailLink();
+                              // Call signInWithEmailLink function with the context and email
+                              if (!_isLoading) {
+                                setState(() {
+                                  _isLoading = true;
+                                });
+                                try {
+                                  await Functions.signInWithEmailLink(context,
+                                      _emailController.text, _isLoading);
+                                } finally {
+                                  setState(() {
+                                    _isLoading = false;
+                                  });
+                                  _emailController.clear();
+                                }
+                              }
                             }
                           },
                           style: ElevatedButton.styleFrom(
@@ -368,7 +243,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                           child: Text(
                               _isLoading ? 'Loading' : 'Email Sign In Link'),
-                        ),
+                        )
                       ],
                     ),
                   ],
