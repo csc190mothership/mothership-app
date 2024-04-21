@@ -1,8 +1,6 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:mothership/main.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:mothership/functions.dart';
 
 class AccountSetupPage extends StatefulWidget {
   const AccountSetupPage({super.key});
@@ -25,69 +23,6 @@ class _AccountSetupPageState extends State<AccountSetupPage> {
   final TextEditingController _countryController =
       TextEditingController(text: "USA");
 
-  Future<void> updateUser() async {
-    final firstname = _firstNameController.text.trim();
-    final lastname = _lastNameController.text.trim();
-    final gender = _genderController.text.trim();
-    final mainaddress = _addressOneController.text.trim();
-    final secondaryaddress = _addressTwoController.text.trim();
-    final city = _cityController.text.trim();
-    final region = _regionController.text.trim();
-    final zip = _zipController.text.trim();
-    final country = _countryController.text.trim();
-    final userId = supabase.auth.currentUser!.id;
-
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-      await supabase.from('profiles').update({
-        'first_name': firstname,
-        'last_name': lastname,
-        'gender': gender,
-        'address_one': mainaddress,
-        'address_two': secondaryaddress,
-        'city': city,
-        'region': region,
-        'zip': zip,
-        'country': country,
-        'new_user': 0,
-      }).eq('id', userId);
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Account setup complete!')),
-        );
-        Navigator.of(context).pushReplacementNamed('/');
-        _firstNameController.clear();
-        _lastNameController.clear();
-        _genderController.clear();
-        _addressOneController.clear();
-        _addressTwoController.clear();
-        _cityController.clear();
-        _regionController.clear();
-        _zipController.clear();
-        _countryController.clear();
-      }
-    } on AuthException {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text(
-                'Try again. If unsuccessful, restart registration process.')),
-      );
-    } catch (error) {
-      SnackBar(
-        content: const Text('Unexpected error occurred'),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      );
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
   @override
   void dispose() {
     _firstNameController.dispose();
@@ -104,6 +39,17 @@ class _AccountSetupPageState extends State<AccountSetupPage> {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          _buildSetupAccountContent(),
+          if (_isLoading) _buildLoadingOverlay(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSetupAccountContent() {
     return Center(
       child: Scaffold(
         body: Center(
@@ -214,15 +160,58 @@ class _AccountSetupPageState extends State<AccountSetupPage> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {
-                    _isLoading ? null : updateUser();
+                  onPressed: () async {
+                    if (!_isLoading) {
+                      setState(() {
+                        _isLoading = true; // Set loading state to true
+                      });
+                      try {
+                        await Functions.updateUser(
+                            context,
+                            _firstNameController,
+                            _lastNameController,
+                            _genderController,
+                            _addressOneController,
+                            _addressTwoController,
+                            _cityController,
+                            _regionController,
+                            _zipController,
+                            _countryController);
+                      } finally {
+                        setState(() {
+                          _isLoading = false; // Set loading state to false
+                        });
+                        _firstNameController.clear();
+                        _lastNameController.clear();
+                        _genderController.clear();
+                        _addressOneController.clear();
+                        _addressTwoController.clear();
+                        _cityController.clear();
+                        _regionController.clear();
+                        _zipController.clear();
+                        _countryController.clear();
+                      }
+                    }
                   },
-                  child: Text(_isLoading ? 'Loading' : 'Finish Setup'),
-                ),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: Colors.black,
+                  ),
+                  child: const Text('Finish Setup'),
+                )
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingOverlay() {
+    return Container(
+      color: Colors.black.withOpacity(0.5), // Semi-transparent black color
+      child: const Center(
+        child: CircularProgressIndicator(), // Circular loading indicator
       ),
     );
   }

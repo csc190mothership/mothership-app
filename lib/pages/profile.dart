@@ -1,8 +1,5 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:mothership/main.dart';
-
-import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:mothership/functions.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -12,6 +9,8 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+  bool _isLoading = false;
+
   final TextEditingController _firstNameController = TextEditingController();
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
@@ -22,69 +21,36 @@ class _ProfilePageState extends State<ProfilePage> {
   final TextEditingController _zipController = TextEditingController();
   final TextEditingController _countryController = TextEditingController();
 
-  Future<void> _getInitialProfile() async {
-    final userId = supabase.auth.currentUser?.id;
-    if (userId != null) {
-      final data =
-          await supabase.from('profiles').select().eq('id', userId).single();
-      if (mounted) {
-        setState(() {
-          if (data['first_name'] != null) {
-            _firstNameController.text = data['first_name'];
-          }
-          if (data['last_name'] != null) {
-            _lastNameController.text = data['last_name'];
-          }
-          if (data['gender'] != null) {
-            _genderController.text = data['gender'];
-          }
-          if (data['last_name'] != null) {
-            _addressOneController.text = data['address_one'];
-          }
-          if (data['first_name'] != null) {
-            _addressTwoController.text = data['address_two'];
-          }
-          if (data['last_name'] != null) {
-            _cityController.text = data['city'];
-          }
-          if (data['first_name'] != null) {
-            _regionController.text = data['region'];
-          }
-          if (data['last_name'] != null) {
-            _zipController.text = data['zip'];
-          }
-          if (data['first_name'] != null) {
-            _countryController.text = data['country'];
-          }
-        });
-      }
-    }
-  }
-
-  Future<void> signOut() async {
-    try {
-      await supabase.auth.signOut();
-    } on AuthException catch (error) {
-      SnackBar(
-        content: Text(error.message),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      );
-    } catch (error) {
-      SnackBar(
-        content: const Text('Unexpected error occurred'),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      );
-    } finally {
-      if (mounted) {
-        Navigator.of(context).pushReplacementNamed('/login');
-      }
-    }
-  }
-
   @override
   void initState() {
     super.initState();
-    _getInitialProfile();
+    _getProfile();
+  }
+
+  Future<void> _getProfile() async {
+    if (!_isLoading) {
+      setState(() {
+        _isLoading = true; // Set loading state to true
+      });
+      try {
+        final profileData = await Functions.getInitialProfile(context);
+
+        // Update text controllers with the retrieved data
+        _firstNameController.text = profileData['first_name'] ?? '';
+        _lastNameController.text = profileData['last_name'] ?? '';
+        _genderController.text = profileData['gender'] ?? '';
+        _addressOneController.text = profileData['address_one'] ?? '';
+        _addressTwoController.text = profileData['address_two'] ?? '';
+        _cityController.text = profileData['city'] ?? '';
+        _regionController.text = profileData['region'] ?? '';
+        _zipController.text = profileData['zip'] ?? '';
+        _countryController.text = profileData['country'] ?? '';
+      } finally {
+        setState(() {
+          _isLoading = false; // Set loading state to false
+        });
+      }
+    }
   }
 
   @override
@@ -103,6 +69,17 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          _buildProfileContent(),
+          if (_isLoading) _buildLoadingOverlay(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildProfileContent() {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Profile'),
@@ -287,7 +264,9 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
             const SizedBox(height: 50),
             ElevatedButton(
-              onPressed: signOut,
+              onPressed: () async {
+                Functions.signOut(context);
+              },
               child: const Text('Sign Out'),
             ),
             const SizedBox(height: 10),
@@ -299,6 +278,15 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingOverlay() {
+    return Container(
+      color: Colors.black.withOpacity(0.5), // Semi-transparent black color
+      child: const Center(
+        child: CircularProgressIndicator(), // Circular loading indicator
       ),
     );
   }

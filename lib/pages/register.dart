@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'dart:io';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mothership/functions.dart';
 import 'package:mothership/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -26,146 +24,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
   late final StreamSubscription<AuthState> _authStateSubscription;
 
-  Future<void> isNewUser() async {
-    try {
-      final userId = supabase.auth.currentUser?.id;
-      if (userId != null) {
-        final data =
-            await supabase.from('profiles').select().eq('id', userId).single();
-        if (mounted) {
-          setState(() {
-            if (data['new_user'] == 1) {
-              Navigator.of(context).pushReplacementNamed('/account');
-            } else {
-              Navigator.of(context).pushReplacementNamed('/profile');
-            }
-          });
-        }
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Unexpected error occurred.')),
-      );
-      await supabase.auth.signOut();
-      Navigator.of(context).pushReplacementNamed('/');
-    }
-  }
-
-  bool isEmailValid(String email) {
-    String emailPattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
-    RegExp regExp = RegExp(emailPattern);
-    return regExp.hasMatch(email);
-  }
-
-  bool isPasswordValid(String password, String confirmPassword) {
-    if (password.isEmpty) {
-      return false;
-    } else {
-      if (password.length < 6) {
-        return false;
-      } else {
-        return password == confirmPassword;
-      }
-    }
-  }
-
-  Future<void> signUpNewUser() async {
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-      await supabase.auth.signUp(
-          email: _emailController.text.trim(),
-          password: _passwordController.text.trim());
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Registration Successful!')),
-        );
-        _emailController.clear();
-        _passwordController.clear();
-        _confirmPasswordController.clear();
-      }
-    } on AuthException {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('Unable to register. Account may already exist.')),
-      );
-    } catch (error) {
-      SnackBar(
-        content: const Text('Unexpected error occurred'),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      );
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
-
-  Future<void> google() async {
-    if (!kIsWeb && (Platform.isAndroid || Platform.isIOS)) {
-      /// Web Client ID that you registered with Google Cloud.
-      const webClientId =
-          '357859755210-g0d3308u6esm71v2jthpcflc0p2m430m.apps.googleusercontent.com';
-
-      /// iOS Client ID that you registered with Google Cloud.
-      const iosClientId =
-          '357859755210-3a8dqcie0ripvib91cqcoiirl1lmfhb0.apps.googleusercontent.com';
-
-      final GoogleSignIn googleSignIn = GoogleSignIn(
-        clientId: iosClientId,
-        serverClientId: webClientId,
-      );
-      final googleUser = await googleSignIn.signIn();
-      final googleAuth = await googleUser!.authentication;
-      final accessToken = googleAuth.accessToken;
-      final idToken = googleAuth.idToken;
-
-      if (accessToken == null) {
-        throw 'No Access Token found.';
-      }
-      if (idToken == null) {
-        throw 'No ID Token found.';
-      }
-
-      try {
-        setState(() {
-          _isLoading = true;
-        });
-        await supabase.auth.signInWithIdToken(
-          provider: OAuthProvider.google,
-          idToken: idToken,
-          accessToken: accessToken,
-        );
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Registration Successful!')),
-          );
-        } else {
-          await supabase.auth.signInWithOAuth(OAuthProvider.google);
-        }
-      } on AuthException {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Unable to register. Account may already exist.')),
-        );
-      } catch (error) {
-        SnackBar(
-          content: const Text('Unexpected error occurred'),
-          backgroundColor: Theme.of(context).colorScheme.error,
-        );
-      } finally {
-        if (mounted) {
-          setState(() {
-            _isLoading = false;
-          });
-        }
-      }
-    }
-  }
-
   @override
   void initState() {
     _authStateSubscription = supabase.auth.onAuthStateChange.listen((data) {
@@ -173,7 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
       final session = data.session;
       if (session != null) {
         _redirecting = true;
-        isNewUser();
+        Functions.isNewUser(context);
       }
     });
     super.initState();
@@ -190,6 +48,17 @@ class _RegisterPageState extends State<RegisterPage> {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: Stack(
+        children: [
+          _buildRegisterContent(),
+          if (_isLoading) _buildLoadingOverlay(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRegisterContent() {
     return Center(
       child: Scaffold(
         body: Center(
@@ -252,8 +121,8 @@ class _RegisterPageState extends State<RegisterPage> {
                 ),
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {
-                    if (!isEmailValid(_emailController.text)) {
+                  onPressed: () async {
+                    if (!Functions.isEmailValid(_emailController.text)) {
                       // Show error message for invalid email format
                       showDialog(
                         context: context,
@@ -273,12 +142,24 @@ class _RegisterPageState extends State<RegisterPage> {
                         },
                       );
                     } else {
-                      bool passwordsMatch = isPasswordValid(
+                      bool passwordsMatch = Functions.isPasswordValid(
                           _passwordController.text,
                           _confirmPasswordController.text);
-                      if (passwordsMatch) {
-                        // Passwords match and email is valid, continue with signup
-                        _isLoading ? null : signUpNewUser();
+                      if (passwordsMatch & !_isLoading) {
+                        try {
+                          setState(() {
+                            _isLoading = true; // Set loading state to false
+                          });
+                          await Functions.signUpNewUser(
+                              context, _emailController, _passwordController);
+                        } finally {
+                          setState(() {
+                            _isLoading = false; // Set loading state to false
+                          });
+                          _emailController.clear();
+                          _passwordController.clear();
+                          _confirmPasswordController.clear();
+                        }
                       } else {
                         // Passwords don't match, show error message
                         showDialog(
@@ -306,27 +187,48 @@ class _RegisterPageState extends State<RegisterPage> {
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.black,
                   ),
-                  child: Text(_isLoading ? 'Loading' : 'Sign Up'),
+                  child: const Text('Sign Up'),
                 ),
                 const SizedBox(height: 20),
                 const Divider(
                   thickness: 2,
-                ), // Horizontal line below the "Sign In" button
+                ), // Horizontal line below the "Sign Up" button
                 const SizedBox(height: 20),
                 ElevatedButton(
-                  onPressed: () {
-                    _isLoading ? null : google();
+                  onPressed: () async {
+                    if (!_isLoading) {
+                      setState(() {
+                        _isLoading = true; // Set loading state to true
+                      });
+                      try {
+                        // Call the google function from functions.dart
+                        await Functions.google(context);
+                      } finally {
+                        setState(() {
+                          _isLoading = false; // Set loading state to false
+                        });
+                      }
+                    }
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Colors.white,
                     backgroundColor: Colors.green,
                   ),
-                  child: Text(_isLoading ? 'Loading' : 'Google Sign Up'),
-                ),
+                  child: const Text('Google Sign Up'),
+                )
               ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingOverlay() {
+    return Container(
+      color: Colors.black.withOpacity(0.5), // Semi-transparent black color
+      child: const Center(
+        child: CircularProgressIndicator(), // Circular loading indicator
       ),
     );
   }

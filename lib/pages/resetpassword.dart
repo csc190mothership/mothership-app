@@ -1,7 +1,6 @@
 import 'dart:async';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:mothership/functions.dart';
 import 'package:mothership/main.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -19,47 +18,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   late final TextEditingController _emailController = TextEditingController();
 
   late final StreamSubscription<AuthState> _authStateSubscription;
-
-  bool isEmailValid(String email) {
-    String emailPattern = r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$';
-    RegExp regExp = RegExp(emailPattern);
-    return regExp.hasMatch(email);
-  }
-
-  Future<void> resetPassword() async {
-    try {
-      setState(() {
-        _isLoading = true;
-      });
-      await supabase.auth.resetPasswordForEmail(
-        _emailController.text.trim(),
-        redirectTo:
-            kIsWeb ? null : 'io.supabase.flutterquickstart://login-callback/',
-      );
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Check your email to reset password!')),
-        );
-        _emailController.clear();
-      }
-    } on AuthException catch (error) {
-      SnackBar(
-        content: Text(error.message),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      );
-    } catch (error) {
-      SnackBar(
-        content: const Text('Unexpected error occurred'),
-        backgroundColor: Theme.of(context).colorScheme.error,
-      );
-    } finally {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
 
   @override
   void initState() {
@@ -84,45 +42,79 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Reset Password')),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
+      body: Stack(
         children: [
-          const Text('Reset password with your email below'),
-          const SizedBox(height: 18),
-          TextFormField(
-            controller: _emailController,
-            decoration: const InputDecoration(labelText: 'Email'),
-          ),
-          const SizedBox(height: 18),
-          ElevatedButton(
-            onPressed: () {
-              if (!isEmailValid(_emailController.text)) {
-                // Show error message for invalid email format
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: const Text('Error'),
-                      content: const Text('Enter a valid email.'),
-                      actions: <Widget>[
-                        TextButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text('OK'),
-                        ),
-                      ],
-                    );
-                  },
-                );
-              } else {
-                _isLoading ? null : resetPassword();
-              }
-            },
-            child: Text(_isLoading ? 'Loading' : 'Send Email'),
-          ),
+          _buildPasswordContent(),
+          if (_isLoading) _buildLoadingOverlay(),
         ],
+      ),
+    );
+  }
+
+  Widget _buildPasswordContent() {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Reset Password')),
+      body: Center(
+        child: ListView(
+          padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 12),
+          children: [
+            const Text('Reset password with your email below'),
+            const SizedBox(height: 18),
+            TextFormField(
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: 'Email'),
+            ),
+            const SizedBox(height: 18),
+            ElevatedButton(
+              onPressed: () async {
+                if (!Functions.isEmailValid(_emailController.text)) {
+                  // Show error message for invalid email format
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('Error'),
+                        content: const Text('Enter a valid email.'),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                            child: const Text('OK'),
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                } else {
+                  if (!_isLoading) {
+                    try {
+                      setState(() {
+                        _isLoading = true; // Set loading state to false
+                      });
+                      await Functions.resetPassword(context, _emailController);
+                    } finally {
+                      setState(() {
+                        _isLoading = false; // Set loading state to false
+                      });
+                      _emailController.clear();
+                    }
+                  }
+                }
+              },
+              child: const Text('Send Email'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildLoadingOverlay() {
+    return Container(
+      color: Colors.black.withOpacity(0.5), // Semi-transparent black color
+      child: const Center(
+        child: CircularProgressIndicator(), // Circular loading indicator
       ),
     );
   }
