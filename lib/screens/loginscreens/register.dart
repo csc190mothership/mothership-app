@@ -2,6 +2,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mothership/functions.dart';
 import 'package:mothership/main.dart';
+import 'package:mothership/screens/debughome.dart';
+import 'package:mothership/screens/loginscreens/login.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class RegisterPage extends StatefulWidget {
@@ -31,7 +34,12 @@ class _RegisterPageState extends State<RegisterPage> {
       final session = data.session;
       if (session != null) {
         _redirecting = true;
-        Functions.isNewUser(context);
+        //Functions.isNewUser(context);
+        //temporary push while i figure out how i want direction of user to go
+        Navigator.push(
+                            context,
+                            PageTransition(type: PageTransitionType.fade, child:debugHome())
+                          );
       }
     });
     super.initState();
@@ -61,6 +69,9 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget _buildRegisterContent() {
     return Center(
       child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Register'),
+        ),
         body: Center(
           child: Padding(
             padding: const EdgeInsets.all(16.0),
@@ -95,17 +106,22 @@ class _RegisterPageState extends State<RegisterPage> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: <Widget>[
-                        GestureDetector(
-                          onTap: () {
-                            Navigator.pushReplacementNamed(context, '/login');
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const LoginPage(),
+                              ),
+                            );
                           },
                           child: const Text(
                             'Login?',
                             style: TextStyle(fontWeight: FontWeight.bold),
                           ),
                         ),
-                        GestureDetector(
-                          onTap: () {
+                        TextButton(
+                          onPressed: () {
                             setState(() {
                               _obscurePassword = !_obscurePassword;
                             });
@@ -183,10 +199,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       }
                     }
                   },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.black,
-                  ),
                   child: const Text('Sign Up'),
                 ),
                 const SizedBox(height: 20),
@@ -206,14 +218,12 @@ class _RegisterPageState extends State<RegisterPage> {
                       } finally {
                         setState(() {
                           _isLoading = false; // Set loading state to false
+                          
                         });
                       }
                     }
+                    
                   },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Colors.white,
-                    backgroundColor: Colors.green,
-                  ),
                   child: const Text('Google Sign Up'),
                 )
               ],

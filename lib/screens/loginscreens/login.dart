@@ -2,10 +2,14 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mothership/functions.dart';
 import 'package:mothership/main.dart';
+import 'package:mothership/screens/debughome.dart';
+import 'package:mothership/screens/loginscreens/register.dart';
+import 'package:mothership/screens/loginscreens/resetpassword.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  const LoginPage({Key? key}) : super(key: key);
 
   @override
   State<LoginPage> createState() => _LoginPageState();
@@ -28,7 +32,12 @@ class _LoginPageState extends State<LoginPage> {
       final session = data.session;
       if (session != null) {
         _redirecting = true;
-        Functions.isNewUser(context);
+        //Functions.isNewUser(context);
+        //temporary push while i figure out how i want direction of user to go
+        Navigator.push(
+          context,
+          PageTransition(type: PageTransitionType.fade, child:debugHome())
+        );
       }
     });
     super.initState();
@@ -45,6 +54,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Login'),
+      ),
       body: Stack(
         children: [
           _buildLoginContent(),
@@ -82,17 +94,21 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacementNamed(context, '/register');
+                    TextButton(
+                      onPressed: () {
+                       Navigator.push(
+                          context,
+                          PageTransition(type: PageTransitionType.fade, child:RegisterPage())
+                        
+                        );
                       },
                       child: const Text(
                         'Register?',
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
+                    TextButton(
+                      onPressed: () {
                         setState(() {
                           _obscurePassword = !_obscurePassword;
                         });
@@ -107,10 +123,13 @@ class _LoginPageState extends State<LoginPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: <Widget>[
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacementNamed(
-                            context, '/resetpassword');
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          PageTransition(type: PageTransitionType.fade, child:ResetPasswordPage())
+                        
+                        );
                       },
                       child: const Text(
                         'Reset Password',
@@ -159,12 +178,12 @@ class _LoginPageState extends State<LoginPage> {
                       _passwordController.clear();
                     }
                   }
+                  Navigator.push(
+                            context,
+                            PageTransition(type: PageTransitionType.fade, child:debugHome())
+                          );
                 }
               },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.white,
-                backgroundColor: Colors.black,
-              ),
               child: const Text('Sign In'),
             ),
             const SizedBox(height: 20),
@@ -193,10 +212,6 @@ class _LoginPageState extends State<LoginPage> {
                           }
                         }
                       },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.green,
-                      ),
                       child: const Text('Google Sign In'),
                     )
                   ],
@@ -239,6 +254,7 @@ class _LoginPageState extends State<LoginPage> {
                               });
                               _emailController.clear();
                             }
+                            
                           }
                         }
                       },

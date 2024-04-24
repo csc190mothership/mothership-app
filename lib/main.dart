@@ -36,11 +36,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      debugShowCheckedModeBanner: true,
+      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       title: 'Flutter Demo',
       theme: Provider.of<ThemeProvider>(context).getTheme(),
-      home: const MyHomePage(),
+      home: const SplashPage(),
     );
   }
 }

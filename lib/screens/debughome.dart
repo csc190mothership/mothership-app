@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mothership/screens/loginscreens/profile.dart';
+import 'package:page_transition/page_transition.dart';
 import 'loginscreens/register.dart';
 
 class debugHome extends StatelessWidget {
@@ -7,6 +9,7 @@ class debugHome extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Mothership"),
+        leading: null,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -17,10 +20,7 @@ class debugHome extends StatelessWidget {
           SizedBox(height:10),
           ElevatedButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => RegisterPage()),
-              );
+              changePage(context, RegisterPage());
             },
             child: Text('Register'),
           ),
@@ -28,4 +28,13 @@ class debugHome extends StatelessWidget {
       ),
     );
   }
+}
+
+
+void changePage(BuildContext context, Widget Screen) {
+  Navigator.push(
+                context,
+                PageTransition(type: PageTransitionType.fade, child:Screen)
+              
+              );
 }
