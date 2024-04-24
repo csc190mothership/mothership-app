@@ -1,12 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:mothership/pages/login.dart';
-import 'package:mothership/pages/newpassword.dart';
-import 'package:mothership/pages/profile.dart';
-import 'package:mothership/pages/register.dart';
-import 'package:mothership/pages/resetpassword.dart';
-import 'package:mothership/pages/setupaccount.dart';
-import 'package:mothership/pages/splash.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:mothership/screens/debughome.dart';
+import 'package:mothership/screens/loginscreens/login.dart';
+import 'package:mothership/screens/loginscreens/newpassword.dart';
+import 'package:mothership/screens/loginscreens/profile.dart';
+import 'package:mothership/screens/loginscreens/register.dart';
+import 'package:mothership/screens/loginscreens/resetpassword.dart';
+import 'package:mothership/screens/loginscreens/setupaccount.dart';
+import 'package:mothership/screens/loginscreens/splash.dart';
+import 'package:mothership/themeprovider.dart';
+import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+
+import 'screens/settings.dart';
+import 'screens/shop.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -31,16 +38,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: true,
       initialRoute: '/',
-      routes: {
-        '/': (context) => const SplashPage(),
-        '/register': (context) => const RegisterPage(),
-        '/login': (context) => const LoginPage(),
-        '/account': (context) => const AccountSetupPage(),
-        '/profile': (context) => const ProfilePage(),
-        '/resetpassword': (context) => const ResetPasswordPage(),
-        '/newpassword': (context) => const NewPasswordPage(),
-      },
-      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: Provider.of<ThemeProvider>(context).getTheme(),
       home: const MyHomePage(),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'register.dart';
+import 'loginscreens/register.dart';
 
 class debugHome extends StatelessWidget {
   @override
@@ -19,7 +19,7 @@ class debugHome extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Register()),
+                MaterialPageRoute(builder: (context) => RegisterPage()),
               );
             },
             child: Text('Register'),
