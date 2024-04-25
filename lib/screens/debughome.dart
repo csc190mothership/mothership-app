@@ -9,7 +9,7 @@ class debugHome extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Mothership"),
-        leading: null,
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,

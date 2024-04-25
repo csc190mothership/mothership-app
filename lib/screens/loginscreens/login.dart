@@ -36,7 +36,7 @@ class _LoginPageState extends State<LoginPage> {
         //temporary push while i figure out how i want direction of user to go
         Navigator.push(
           context,
-          PageTransition(type: PageTransitionType.fade, child:debugHome())
+          PageTransition(type: PageTransitionType.fade, child:MyHomePage())
         );
       }
     });
@@ -258,10 +258,6 @@ class _LoginPageState extends State<LoginPage> {
                           }
                         }
                       },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.green,
-                      ),
                       child: const Text('Email Sign In Link'),
                     )
                   ],
