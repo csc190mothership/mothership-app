@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'register.dart';
+import 'package:mothership/screens/loginscreens/profile.dart';
+import 'package:page_transition/page_transition.dart';
+import 'loginscreens/register.dart';
 
 class debugHome extends StatelessWidget {
   @override
@@ -7,6 +9,7 @@ class debugHome extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Mothership"),
+        automaticallyImplyLeading: false,
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -15,17 +18,18 @@ class debugHome extends StatelessWidget {
             child: Text("Welcome to Mothership debug home!"),
           ),
           SizedBox(height:10),
-          ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => Register()),
-              );
-            },
-            child: Text('Register'),
-          ),
+          
         ],
       ),
     );
   }
+}
+
+
+void changePage(BuildContext context, Widget Screen) {
+  Navigator.push(
+                context,
+                PageTransition(type: PageTransitionType.fade, child:Screen)
+              
+              );
 }

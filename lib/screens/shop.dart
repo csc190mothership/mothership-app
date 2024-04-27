@@ -13,6 +13,7 @@ class _ShopState extends State<Shop> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Shop'),
+        automaticallyImplyLeading: false,
         actions: <Widget>[
           IconButton(icon: Icon(Icons.search),
               onPressed: () {

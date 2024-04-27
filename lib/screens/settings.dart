@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mothership/screens/loginscreens/profile.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '../themeprovider.dart';
@@ -56,6 +57,7 @@ class _SettingsState extends State<Settings> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Settings"),
+        automaticallyImplyLeading: false,
       ),
       body: ListView(
         children: [
@@ -155,6 +157,8 @@ class _AccountSettingsState extends State<AccountSettings> {
       ),
       body: ListView(
         children: [
+          settingsHeader("Profile"),
+          settingsTile("Profile Details", (){Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeft, child:const ProfilePage()));}),
           settingsHeader("My Account"),
           settingsTile("Change Email", (){changeSomething(context, email, "Email");}),
           
