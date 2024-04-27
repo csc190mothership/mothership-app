@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mothership/screens/cart.dart';
 import 'search.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -29,7 +30,10 @@ class _ShopState extends State<Shop> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          //TODO: route to cart
+          Navigator.push(
+                  context,
+                  PageTransition(type: PageTransitionType.fade, child:CartPage())
+                );
         },
         child: const Icon(Icons.shopping_cart),
       )

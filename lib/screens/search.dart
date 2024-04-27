@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mothership/screens/cart.dart';
 import 'package:page_transition/page_transition.dart';
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 import '../utilities/kroger-services.dart';
 import '../utilities/product.dart';
@@ -77,6 +79,7 @@ class _SearchState extends State<Search> {
   }
 
   Widget searchItem(Product item) {
+    CartModel _cartModel = Provider.of<CartModel>(context);
     return ListTile(
         leading: FadeInImage.memoryNetwork(
           placeholder: kTransparentImage,
@@ -85,6 +88,9 @@ class _SearchState extends State<Search> {
         ), //this fade in image allows us to load images in 3 lines. living in the future.
         title: Text(item.name),
         subtitle: Text("\$" + (item.price).toString()),
+        trailing: IconButton(icon: Icon(Icons.add), onPressed: () {
+          _cartModel.addItemToCart(item);
+        }),
         onTap: () {
           Navigator.push(
             context,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:mothership/screens/cart.dart';
 import 'package:mothership/screens/debughome.dart';
 import 'package:mothership/screens/loginscreens/login.dart';
 import 'package:mothership/screens/loginscreens/newpassword.dart';
@@ -24,8 +25,14 @@ Future<void> main() async {
     anonKey:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0eGpzY3hlcnNiY3hqa3J5Z3ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDkwNTI3MDMsImV4cCI6MjAyNDYyODcwM30.tkam8fZ888I7DpSBPZC_dQyy1qr0vgPS3p_uHU5GEBs',
   );
-  runApp(ChangeNotifierProvider(
-      create: (context) => ThemeProvider(), child: const MyApp()));
+
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (context) => ThemeProvider()),
+      ChangeNotifierProvider(create: (context) => CartModel()),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 final supabase = Supabase.instance.client;
