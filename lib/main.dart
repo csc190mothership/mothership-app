@@ -1,20 +1,34 @@
 import 'package:flutter/material.dart';
-import 'theme.dart';
-import 'dart:io';
-import 'screens/settings.dart';
-import 'screens/debughome.dart';
-import 'screens/register.dart';
-import 'screens/shop.dart';
-import 'screens/search.dart';
-import 'package:provider/provider.dart';
-import 'themeprovider.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:mothership/screens/debughome.dart';
+import 'package:mothership/screens/loginscreens/login.dart';
+import 'package:mothership/screens/loginscreens/newpassword.dart';
+import 'package:mothership/screens/loginscreens/profile.dart';
+import 'package:mothership/screens/loginscreens/register.dart';
+import 'package:mothership/screens/loginscreens/resetpassword.dart';
+import 'package:mothership/screens/loginscreens/setupaccount.dart';
+import 'package:mothership/screens/loginscreens/splash.dart';
+import 'package:mothership/themeprovider.dart';
+import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() async {
+import 'screens/settings.dart';
+import 'screens/shop.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  
   await dotenv.load(fileName: ".env");
+  await Supabase.initialize(
+    url: 'https://ptxjscxersbcxjkrygve.supabase.co',
+    anonKey:
+        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB0eGpzY3hlcnNiY3hqa3J5Z3ZlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDkwNTI3MDMsImV4cCI6MjAyNDYyODcwM30.tkam8fZ888I7DpSBPZC_dQyy1qr0vgPS3p_uHU5GEBs',
+  );
   runApp(ChangeNotifierProvider(
       create: (context) => ThemeProvider(), child: const MyApp()));
 }
+
+final supabase = Supabase.instance.client;
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key});
@@ -23,9 +37,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
+      initialRoute: '/',
       title: 'Flutter Demo',
       theme: Provider.of<ThemeProvider>(context).getTheme(),
-      home: const MyHomePage(),
+      home: const SplashPage(),
     );
   }
 }

@@ -1,16 +1,18 @@
-# mothership
+<h1>Features implemented so far:</h1>
+    
+    Auth Login/Register Page
+    Account/Profile Page with Save and Sign Out option
+    MFA Enroll/Verify/List Page with Delete option
 
-A new Flutter project.
+<h1>Current Flow:</h1>
 
-## Getting Started
+- Check if auth session is active;
+  <br>if so go to account/profile page,
+  <br>if not go to register page.
 
-This project is a starting point for a Flutter application.
+- If registering, user inputs email and password (can hide/show it) which gets added to the database once button is pressed and a verification email is sent and user is notified they need to verify their email. Once registered, user needs to enroll in MFA by scanning code or copying key into 3rd party authenticator app, and needs to enter the code given to successfully finish MFA enrollment and redirect to the account/profile page.
 
-A few resources to get you started if this is your first Flutter project:
+- If logging in, user inputs email and password, if successful, checks if device is in MFA allow list, if not, they need to put a code from authenticator app to succesfully login and then is redirected to the account/profile page.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+<h1>environment variables<h1>
+ -Check out the .env.example file to see how the environmental variables are stored. For security the .env file is in the gitignore. You can find the secrets on team notion.
