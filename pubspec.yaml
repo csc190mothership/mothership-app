@@ -52,6 +52,7 @@ dependencies:
   page_transition: ^2.1.0
   intl_phone_number_input: ^0.7.4
   transparent_image: ^2.0.1
+  video_player: ^2.8.6
 
 dev_dependencies:
   flutter_test:

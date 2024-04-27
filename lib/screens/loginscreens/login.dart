@@ -179,93 +179,112 @@ class _LoginPageState extends State<LoginPage> {
                     }
                   }
                   Navigator.push(
-                            context,
-                            PageTransition(type: PageTransitionType.fade, child:debugHome())
-                          );
+                    context,
+                    PageTransition(type: PageTransitionType.fade, child: debugHome()),
+                  );
                 }
               },
               child: const Text('Sign In'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 0), // Set minimum width to screen width
+                padding: EdgeInsets.symmetric(vertical: 16), // Add vertical padding of 16
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
             ),
             const SizedBox(height: 20),
             const Divider(
               thickness: 2,
             ), // Horizontal line below the "Sign In" button
             const SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+            Column(
               children: [
-                Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (!_isLoading) {
-                          setState(() {
-                            _isLoading = true; // Set loading state to true
-                          });
-                          try {
-                            // Call the google function from functions.dart
-                            await Functions.google(context);
-                          } finally {
-                            setState(() {
-                              _isLoading = false; // Set loading state to false
-                            });
-                          }
-                        }
-                      },
-                      child: const Text('Google Sign In'),
-                    )
-                  ],
-                ),
-                Column(
-                  children: [
-                    ElevatedButton(
-                      onPressed: () async {
-                        if (!Functions.isEmailValid(_emailController.text)) {
-                          // Show error message for invalid email format
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Error'),
-                                content: const Text('Enter a valid email.'),
-                                actions: <Widget>[
-                                  TextButton(
-                                    onPressed: () {
-                                      Navigator.of(context).pop();
-                                    },
-                                    child: const Text('OK'),
-                                  ),
-                                ],
-                              );
-                            },
+                ElevatedButton(
+                  onPressed: () async {
+                    if (!_isLoading) {
+                      setState(() {
+                        _isLoading = true; // Set loading state to true
+                      });
+                      try {
+                        // Call the google function from functions.dart
+                        await Functions.google(context);
+                      } finally {
+                        setState(() {
+                          _isLoading = false; // Set loading state to false
+                        });
+                      }
+                    }
+                  },
+                  child: const Text('Google Sign In'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 0), // Set minimum width to screen width
+                    padding: EdgeInsets.symmetric(vertical: 16), // Add vertical padding of 16
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(height: 20),
+            Column(
+              children: [
+                ElevatedButton(
+                  onPressed: () async {
+                    if (!Functions.isEmailValid(_emailController.text)) {
+                      // Show error message for invalid email format
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDialog(
+                            title: const Text('Error'),
+                            content: const Text('Enter a valid email.'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
                           );
-                        } else {
-                          // Call signInWithEmailLink function with the context and email
-                          if (!_isLoading) {
-                            setState(() {
-                              _isLoading = true;
-                            });
-                            try {
-                              await Functions.signInWithEmailLink(
-                                  context, _emailController);
-                            } finally {
-                              setState(() {
-                                _isLoading = false;
-                              });
-                              _emailController.clear();
-                            }
-                            
-                          }
+                        },
+                      );
+                    } else {
+                      // Call signInWithEmailLink function with the context and email
+                      if (!_isLoading) {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        try {
+                          await Functions.signInWithEmailLink(
+                              context, _emailController);
+                        } finally {
+                          setState(() {
+                            _isLoading = false;
+                          });
+                          _emailController.clear();
                         }
-                      },
-                      child: const Text('Email Sign In Link'),
-                    )
-                  ],
-                ),
+                        
+                      }
+                    }
+                  },
+                  child: const Text('Email Sign In Link'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 0), // Set minimum width to screen width
+                    padding: EdgeInsets.symmetric(vertical: 16), // Add vertical padding of 16
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
+                )
               ],
             ),
           ],
         ),
+      
+    
       ),
     );
   }

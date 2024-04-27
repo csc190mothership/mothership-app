@@ -200,6 +200,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     }
                   },
                   child: const Text('Sign Up'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 0), // Set minimum width to screen width
+                    padding: EdgeInsets.symmetric(vertical: 16), // Add vertical padding of 16
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                 ),
                 const SizedBox(height: 20),
                 const Divider(
@@ -225,6 +232,13 @@ class _RegisterPageState extends State<RegisterPage> {
                     
                   },
                   child: const Text('Google Sign Up'),
+                  style: ElevatedButton.styleFrom(
+                    minimumSize: Size(double.infinity, 0), // Set minimum width to screen width
+                    padding: EdgeInsets.symmetric(vertical: 16), // Add vertical padding of 16
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                  ),
                 )
               ],
             ),
