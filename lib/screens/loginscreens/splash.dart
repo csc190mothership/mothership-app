@@ -22,7 +22,7 @@ class _SplashPageState extends State<SplashPage> {
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.network('https://bradynorum.com/groceries.mp4');
+    _controller = VideoPlayerController.networkUrl(Uri.parse('https://bradynorum.com/groceries.mp4'));
     _controller.initialize().then((_) {
       _controller.setLooping(true);
       Timer(Duration(milliseconds: 100), () {
@@ -50,6 +50,7 @@ class _SplashPageState extends State<SplashPage> {
             color: Colors.black,
           ),
           _getVideoBackground(),
+          
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -87,14 +88,14 @@ class _SplashPageState extends State<SplashPage> {
   }
   _getVideoBackground() {
     return AnimatedOpacity(
-      opacity: _visible ? .6 : 0.0,
+      opacity: .6,
       duration: Duration(milliseconds: 1000),
       child: SizedBox.expand(
         child: FittedBox(
           fit: BoxFit.cover,
           child: SizedBox(
-            width: _controller.value.size?.width ?? 0,
-            height: _controller.value.size?.height ?? 0,
+            width: _controller.value.size.width,
+            height: _controller.value.size.height,
             child: VideoPlayer(_controller),
           ),
         ),

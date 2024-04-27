@@ -4,6 +4,7 @@ import 'package:mothership/functions.dart';
 import 'package:mothership/main.dart';
 import 'package:mothership/screens/debughome.dart';
 import 'package:mothership/screens/loginscreens/login.dart';
+import 'package:mothership/screens/loginscreens/setupaccount.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -38,7 +39,7 @@ class _RegisterPageState extends State<RegisterPage> {
         //temporary push while i figure out how i want direction of user to go
         Navigator.push(
                             context,
-                            PageTransition(type: PageTransitionType.fade, child:debugHome())
+                            PageTransition(type: PageTransitionType.fade, child:AccountSetupPage())
                           );
       }
     });

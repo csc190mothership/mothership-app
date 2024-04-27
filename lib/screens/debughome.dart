@@ -18,12 +18,7 @@ class debugHome extends StatelessWidget {
             child: Text("Welcome to Mothership debug home!"),
           ),
           SizedBox(height:10),
-          ElevatedButton(
-            onPressed: () {
-              changePage(context, RegisterPage());
-            },
-            child: Text('Register'),
-          ),
+          
         ],
       ),
     );

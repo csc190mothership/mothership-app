@@ -359,7 +359,7 @@ class Functions {
         backgroundColor: Theme.of(context).colorScheme.error,
       );
     } finally {
-      Navigator.of(context).pushReplacementNamed('/login');
+      Navigator.of(context).pushReplacementNamed('/');
     }
   }
 }
