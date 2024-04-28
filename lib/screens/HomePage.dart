@@ -3,7 +3,7 @@ import 'package:mothership/screens/loginscreens/profile.dart';
 import 'package:page_transition/page_transition.dart';
 import 'loginscreens/register.dart';
 
-class debugHome extends StatelessWidget {
+class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +15,7 @@ class debugHome extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Center(
-            child: Text("Welcome to Mothership debug home!"),
+            child: Text("this is where the home will go"),
           ),
           SizedBox(height:10),
           

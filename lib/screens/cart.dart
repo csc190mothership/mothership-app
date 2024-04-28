@@ -5,7 +5,7 @@ import 'package:provider/provider.dart';
 
 
 
-
+//cart data saved as long as app is open via this CartModel which is launched in main
 class CartModel with ChangeNotifier {
   List<Product> cartItems = [];
 
@@ -18,11 +18,21 @@ class CartModel with ChangeNotifier {
     cartItems.removeAt(index);
     notifyListeners();
   }
+
+  double calculateTotalPrice(List<Product> cartItems) {
+    double totalPrice = 0;
+    for (var item in cartItems) {
+      totalPrice += item.price;
+    }
+    totalPrice = double.parse(totalPrice.toStringAsFixed(2));
+    return totalPrice;
+  }
 }
 
 
 class CartPage extends StatelessWidget {
   const CartPage({Key? key}) : super(key: key);
+  
 
   @override
   Widget build(BuildContext context) {
@@ -32,13 +42,11 @@ class CartPage extends StatelessWidget {
       ),
       body: Consumer<CartModel>(
         builder: (context, cart, child) {
+          
+          var totalPrice = cart.calculateTotalPrice(cart.cartItems).toString();
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.0),
-                child: Text("My Cart",),
-              ),
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.all(12.0),
@@ -46,78 +54,86 @@ class CartPage extends StatelessWidget {
                     itemCount: cart.cartItems.length,
                     padding: const EdgeInsets.all(12),
                     itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.grey[200],
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: ListTile(
-                            leading: Image.network( // assuming images are from network
-                              cart.cartItems[index].imageURL, // replace with image path
-                              height: 36,
-                            ),
-                            title: Text(
-                              cart.cartItems[index].name, 
-                              style: const TextStyle(fontSize: 18),
-                            ),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.cancel),
-                              onPressed: () {
-                                cart.removeItemFromCart(index);
-                              },
-                            ),
-                          ),
-                        ),
-                      );
+                      return cartItem(index, cart);
                     },
                   ),
                 ),
               ),
-              // Pay Now Section
-              Padding(
-                padding: const EdgeInsets.all(36.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    // Expanded to fill the space of where the price would have been
-                    const Expanded(
-                      child: SizedBox(),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        // TODO: Implement the payment process or checkout
-                      },
-                      style: ElevatedButton.styleFrom(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(28),
+              Container(
+                color: Theme.of(context).primaryColor,
+                child:
+                  Padding(
+                  padding: const EdgeInsets.all(36.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text("\$" + totalPrice),
+                      
+                      ElevatedButton(
+                        onPressed: () {
+                          // TODO: Implement the payment process or checkout
+                        },
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(28),
+                          ),
+                          padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
                         ),
-                        padding: const EdgeInsets.symmetric(horizontal: 36, vertical: 18),
+                        child: const Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              'Pay Now',
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            SizedBox(width: 8),
+                            Icon(
+                              Icons.arrow_forward_ios,
+                              size: 16,
+                              color: Colors.white,
+                            ),
+                          ],
+                        ),
                       ),
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Pay Now',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          SizedBox(width: 8),
-                          Icon(
-                            Icons.arrow_forward_ios,
-                            size: 16,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
+              )
+              
             ],
           );
         },
       ),
     );
+  }
+
+
+  Widget cartItem(int index, CartModel cart) {
+    return Column(
+      children:[ListTile(
+        leading: Image.network(
+          cart.cartItems[index].imageURL,
+          height: 36,
+        ),
+        title: Text(
+          cart.cartItems[index].name, 
+          style: const TextStyle(fontSize: 18),
+        ),
+        subtitle: Text(
+          cart.cartItems[index].price.toString(),
+          style: const TextStyle(fontSize: 16),
+        ),
+        trailing: IconButton(
+          icon: const Icon(Icons.cancel),
+          onPressed: () {
+            cart.removeItemFromCart(index);
+          },
+        ), 
+      ),
+      Divider(),
+    ]
+    );
+
+
   }
 }

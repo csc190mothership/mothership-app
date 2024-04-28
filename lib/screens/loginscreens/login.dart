@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mothership/functions.dart';
 import 'package:mothership/main.dart';
-import 'package:mothership/screens/debughome.dart';
+import 'package:mothership/screens/HomePage.dart';
 import 'package:mothership/screens/loginscreens/register.dart';
 import 'package:mothership/screens/loginscreens/resetpassword.dart';
 import 'package:page_transition/page_transition.dart';
@@ -180,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                   }
                   Navigator.push(
                     context,
-                    PageTransition(type: PageTransitionType.fade, child: debugHome()),
+                    PageTransition(type: PageTransitionType.fade, child: HomePage()),
                   );
                 }
               },
