@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mothership/screens/cart.dart';
-import 'package:mothership/screens/HomePage.dart';
 import 'package:mothership/screens/loginscreens/login.dart';
 import 'package:mothership/screens/loginscreens/newpassword.dart';
 import 'package:mothership/screens/loginscreens/profile.dart';
@@ -9,6 +8,7 @@ import 'package:mothership/screens/loginscreens/register.dart';
 import 'package:mothership/screens/loginscreens/resetpassword.dart';
 import 'package:mothership/screens/loginscreens/setupaccount.dart';
 import 'package:mothership/screens/loginscreens/splash.dart';
+import 'package:mothership/screens/wallet.dart';
 import 'package:mothership/themeprovider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -68,8 +68,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   final _pageOptions = [
-    HomePage(),
     Shop(),
+    CartPage(),
+    WalletPage(),
     Settings(),
   ];
 
@@ -78,14 +79,19 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       body: _pageOptions[_selectedPage],
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
+            icon: Icon(Icons.storefront),
+            label: 'Shop',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.fastfood),
-            label: 'Shop',
+            icon: Icon(Icons.shopping_cart),
+            label: 'Cart',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.wallet),
+            label: 'Wallet',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),

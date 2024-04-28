@@ -5,6 +5,7 @@ class Product {
   final String name;
   final String imageURL;
   final double price;
+  int quantity = 0;
 
   Product({required this.name, required this.imageURL, required this.price});
 
@@ -27,7 +28,6 @@ class Product {
         }
       }
     }
-
     double price = 0.0;
     if (json['items'] != null && json['items'].isNotEmpty) {
       price = json['items'][0]['price']['regular'] ?? 0.0;
@@ -36,6 +36,10 @@ class Product {
         name: json['description'] ?? 'No name',
         imageURL: imageURL,
         price: price);
+  }
+  int incrementQuantity() {
+    quantity++;
+    return quantity;
   }
 }
 

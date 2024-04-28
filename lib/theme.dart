@@ -16,6 +16,10 @@ class Themes {
       centerTitle: true,
     ),
 
+
+    inputDecorationTheme: const InputDecorationTheme(
+      fillColor: Color(0xFFC2B2B4),
+    ),
     colorScheme: const ColorScheme.light(
       brightness: Brightness.light,
       background: Color(0xFFe6e6e6),
@@ -68,7 +72,12 @@ class Themes {
       onPrimary: Color(0xFF0E131F),
     ),
     
-    
+    inputDecorationTheme: const InputDecorationTheme(
+      fillColor: Color(0xFFe6e6e6),
+      hintStyle: TextStyle(color: Color(0xFF0E131F)),
+
+    ),
+
     elevatedButtonTheme: ElevatedButtonThemeData(
       style: ButtonStyle(
         backgroundColor: MaterialStateProperty.all<Color>(Color(0xFFC2B2B4)),

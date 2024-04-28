@@ -8,14 +8,18 @@ import '../utilities/product.dart';
 import 'dart:async';
 
 class Search extends StatefulWidget {
+  final String? searchString;
+
+  Search({this.searchString});
+
   @override
   _SearchState createState() => _SearchState();
+
 }
 
-//final Item testItem = Item("Test Item", "This is a test item",
-//"https://bradynorum.com/images/myoldface.png", 20.00 as double);
 
 class _SearchState extends State<Search> {
+  
   final TextEditingController _searchController = TextEditingController();
   final KrogerService _krogerService = KrogerService();
   Timer? _debounce;
@@ -44,9 +48,12 @@ class _SearchState extends State<Search> {
   @override
   void initState() {
     super.initState();
+    _searchController.text = widget.searchString!;
+    _onSearchChanged(widget.searchString!);
     _searchController.addListener(() {
       _onSearchChanged(_searchController.text);
     });
+    
   }
 
   @override
@@ -59,22 +66,65 @@ class _SearchState extends State<Search> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: TextField(
-          controller: _searchController,
-          cursorColor: Colors.black,
-          decoration: const InputDecoration(
-            hintText: 'Search...',
-            border: InputBorder.none,
-          ),
+      body: Stack(children:[
+        SingleChildScrollView(
+          child: 
+            Column(
+              children: [
+                SizedBox(height:100),
+                ListView.builder(
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: _products.length,
+                  itemBuilder: (context, index) {
+                    return searchItem(_products[index]);
+                  },
+                ),
+              ],
+            ),
         ),
-      ),
-      body: ListView.builder(
-        itemCount: _products.length,
-        itemBuilder: (context, index) {
-          return searchItem(_products[index]);
-        },
-      ),
+        Column(
+          children: [
+            SizedBox(height: 50),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(Icons.arrow_back),
+                    ),
+                  ),
+                  SizedBox(width: 20),
+                  Expanded(
+                    child: Container(
+                      padding: EdgeInsets.all(7),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(50),
+                        color: Theme.of(context).inputDecorationTheme.fillColor,
+                      ),
+                      child: TextField(
+                        controller: _searchController,
+                        cursorColor: Colors.black,
+                        decoration: InputDecoration(
+                          hintText: 'Search...',
+                          border: InputBorder.none,
+                          prefixIcon: Icon(Icons.search, color: Color(0xFF0E131F)),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ]
+      )
     );
   }
 
@@ -87,10 +137,16 @@ class _SearchState extends State<Search> {
           width: 50,
         ), //this fade in image allows us to load images in 3 lines. living in the future.
         title: Text(item.name),
-        subtitle: Text("\$" + (item.price).toString()),
+        subtitle: Text("\$" + (item.price).toStringAsFixed(2)),
         trailing: IconButton(icon: Icon(Icons.add), onPressed: () {
-          _cartModel.addItemToCart(item);
-        }),
+          if (_cartModel.isItemInCart(item)) {
+            _cartModel.incrementItemQuantity(item);
+          } else {
+            _cartModel.addItemToCart(item);
+            _cartModel.incrementItemQuantity(item);
+          }
+        }
+        ),
         onTap: () {
           Navigator.push(
             context,

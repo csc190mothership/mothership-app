@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:mothership/functions.dart';
 import 'package:mothership/main.dart';
-import 'package:mothership/screens/HomePage.dart';
 import 'package:mothership/screens/loginscreens/login.dart';
 import 'package:mothership/screens/loginscreens/setupaccount.dart';
 import 'package:page_transition/page_transition.dart';

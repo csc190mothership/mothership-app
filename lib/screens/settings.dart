@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:mothership/functions.dart';
 import 'package:mothership/screens/loginscreens/profile.dart';
+import 'package:mothership/screens/loginscreens/resetpassword.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '../themeprovider.dart';
@@ -51,43 +53,75 @@ class Settings extends StatefulWidget {
 }
 
 class _SettingsState extends State<Settings> {
-  
+  final TextEditingController _firstNameController = TextEditingController();
+  bool _isLoading = true;
+
+  Future<void> _getName() async {
+    final profileData = await Functions.getInitialProfile(context);
+
+    // Update text controllers with the retrieved data
+    _firstNameController.text = profileData['first_name'] ?? '';
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _getName();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Settings"),
-        automaticallyImplyLeading: false,
-      ),
-      body: ListView(
-        children: [
-          settingsHeader("Application Settings"),
-          settingsTile("Appearance", (){pushScreen(const AppearanceSettings());}),
-          settingsHeader("My Account"),
-          settingsTile("Profile", (){pushScreen(const AccountSettings());}),
-          settingsTile("Gift Cards", (){}),
-          settingsTile("Payment Cards", (){}),
-          settingsTile("Addresses", (){}),
-          settingsHeader("Your Discounts"),
-          settingsTile("Teacher Discount", (){}),
-          settingsTile("Military Discount", (){}),
-          settingsTile("Hofstra Student Discount", (){}),
-          settingsHeader("Security"),
-          settingsTile("Password", (){}),
-          settingsTile("Wallet Security", (){}),
-        ],
-      ),
+      body: _isLoading
+          ? Center(child: CircularProgressIndicator())
+          : ListView(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 20, left: 20, bottom: 20),
+                  child: Text(
+                    "Hello, " + _firstNameController.text,
+                    style: const TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                settingsHeader("Application Settings"),
+                settingsTile("Appearance", () {
+                  pushScreen(const AppearanceSettings());
+                }),
+                settingsHeader("My Account"),
+                settingsTile("Profile", () {
+                  pushScreen(const AccountSettings());
+                }),
+                settingsTile("Gift Cards", () {}),
+                settingsTile("Payment Cards", () {}),
+                settingsTile("Addresses", () {}),
+                settingsHeader("Your Discounts"),
+                settingsTile("Teacher Discount", () {}),
+                settingsTile("Military Discount", () {}),
+                settingsTile("Hofstra Student Discount", () {}),
+                settingsHeader("Security"),
+                settingsTile("Password", () {
+                  pushScreen(ResetPasswordPage());
+                }),
+                settingsTile("Wallet Security", () {}),
+              ],
+            ),
     );
   }
 
   void pushScreen(Widget screen) {
     Navigator.push(
       context,
-      PageTransition(type: PageTransitionType.rightToLeft, child:screen)
-     
+      PageTransition(type: PageTransitionType.rightToLeft, child: screen),
     );
   }
-
 }
 
 
@@ -110,9 +144,9 @@ class _AppearanceSettingsState extends State<AppearanceSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Settings"),
+        title: const Text("Appearance Settings"),
       ),
-      body: ListView(
+      body: (ListView(
         children: [
           settingsHeader("Appearance"),
           ListTile(
@@ -135,7 +169,7 @@ class _AppearanceSettingsState extends State<AppearanceSettings> {
         
           
         ],
-      ),
+      )),
     );
   }
 }
@@ -153,7 +187,7 @@ class _AccountSettingsState extends State<AccountSettings> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Settings"),
+        title: const Text("Account Settings"),
       ),
       body: ListView(
         children: [
