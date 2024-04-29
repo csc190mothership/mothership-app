@@ -55,6 +55,7 @@ class _SplashPageState extends State<SplashPage> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
+                Image.asset('assets/images/dairy.png', width: 200),
                 Text("Welcome to Mothership!", style:TextStyle(fontSize: 30, color: Colors.white)),
                 SizedBox(height: 20),
                 ElevatedButton(

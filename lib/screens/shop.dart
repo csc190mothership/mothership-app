@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mothership/screens/cart.dart';
 import 'package:mothership/screens/savedlists.dart';
+import 'package:mothership/screens/specialshop.dart';
 import 'search.dart';
 import 'package:page_transition/page_transition.dart';
 
@@ -118,10 +119,10 @@ class _ShopState extends State<Shop> {
                    shrinkWrap: true,
                    physics: NeverScrollableScrollPhysics(),
                     children: [
-                      SpecialShopButton(Color(0xFF53B175),"Produce", "assets/images/meat.png", (){}),
-                        SpecialShopButton(Color(0xFFA53F2B),"Meat", "assets/images/meat.png", (){}),
-                      SpecialShopButton(Color.fromARGB(255, 100, 74, 62),"Alcohol", "assets/images/meat.png", (){}),
-                      SpecialShopButton(Color.fromARGB(255, 185, 185, 185),"Dairy", "assets/images/meat.png", (){}),
+                      SpecialShopButton(Color(0xFF53B175),"Produce", "assets/images/produce.png", (){PushSpecialShop("Produce", "Lettuce", "Apple", "Grapes", "Tomato");}),
+                        SpecialShopButton(Color(0xFFA53F2B),"Meat", "assets/images/meat.png", (){PushSpecialShop("Meat", "Ground Beef", "Chicken", "Hot Dog", "Turkey");}),
+                      SpecialShopButton(Color.fromARGB(255, 100, 74, 62),"Alcohol", "assets/images/beer.png", (){PushSpecialShop("Alcohol", "Beer", "Wine", "Josh", "Hard Seltzer");}),
+                      SpecialShopButton(Color.fromARGB(255, 185, 185, 185),"Dairy", "assets/images/dairy.png", (){PushSpecialShop("Dairy", "Milk", "Yogurt", "Ice Cream", "Cheese");}),
                     ],
                   ),
                 ),
@@ -161,6 +162,14 @@ class _ShopState extends State<Shop> {
         ],
       ),
     );
+  }
+
+  void PushSpecialShop(String dept, String s1, String s2, String s3, String s4) {
+    Navigator.push(
+      context,
+      PageTransition(type: PageTransitionType.fade, child: SpecialShop(department:dept,search1:s1,search2:s2,search3:s3,search4:s4)),
+    );
+
   }
 }
 

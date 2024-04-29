@@ -99,18 +99,10 @@ class _SettingsState extends State<Settings> {
                 settingsTile("Profile", () {
                   pushScreen(const AccountSettings());
                 }),
-                settingsTile("Gift Cards", () {}),
-                settingsTile("Payment Cards", () {}),
                 settingsTile("Addresses", () {}),
-                settingsHeader("Your Discounts"),
-                settingsTile("Teacher Discount", () {}),
-                settingsTile("Military Discount", () {}),
-                settingsTile("Hofstra Student Discount", () {}),
-                settingsHeader("Security"),
-                settingsTile("Password", () {
+                settingsTile("Reset Password", () {
                   pushScreen(ResetPasswordPage());
                 }),
-                settingsTile("Wallet Security", () {}),
               ],
             ),
     );

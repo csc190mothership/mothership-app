@@ -30,7 +30,7 @@ class Product {
     }
     double price = 0.0;
     if (json['items'] != null && json['items'].isNotEmpty) {
-      price = json['items'][0]['price']['regular'] ?? 0.0;
+      price = json['items'][0]['price']['regular'] * 1.0 ?? 0.0;
     }
     return Product(
         name: json['description'] ?? 'No name',

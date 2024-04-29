@@ -70,7 +70,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final _pageOptions = [
     Shop(),
     CartPage(),
-    WalletPage(),
     Settings(),
   ];
 
@@ -88,10 +87,6 @@ class _MyHomePageState extends State<MyHomePage> {
           BottomNavigationBarItem(
             icon: Icon(Icons.shopping_cart),
             label: 'Cart',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.wallet),
-            label: 'Wallet',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings),
