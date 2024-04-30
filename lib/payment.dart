@@ -102,7 +102,7 @@ class Payment {
   }
 
   String calculateAmount(String amount) {
-    final calculatedAmount = (int.parse(amount)) * 100;
+    final calculatedAmount = (double.parse(amount)) * 100;
     return calculatedAmount.toString();
   }
 }

@@ -2,7 +2,9 @@
 import 'package:flutter/material.dart';
 import 'package:mothership/main.dart';
 import 'package:mothership/payment.dart';
+import 'package:mothership/screens/cardinput.dart';
 import 'package:mothership/utilities/product.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 
 // Cart data saved as long as app is open via this CartModel which is launched in main
@@ -69,8 +71,7 @@ class CartModel with ChangeNotifier {
       // Check if quantity is not null before incrementing it
       if (cartItems[index].quantity != null) {
         // increment the quantity by 1
-        cartItems[index].quantity =
-            (cartItems[index].quantity! + 1).clamp(0, double.infinity.toInt());
+        cartItems[index].quantity = cartItems[index].quantity! + 1;
         notifyListeners();
       }
     }
@@ -83,8 +84,7 @@ class CartModel with ChangeNotifier {
       // Check if quantity is not null before decrementing it
       if (cartItems[index].quantity != null) {
         // Decrement the quantity by 1 if it's not null
-        cartItems[index].quantity =
-            (cartItems[index].quantity! - 1).clamp(0, double.infinity.toInt());
+        cartItems[index].quantity = cartItems[index].quantity! - 1;
 
         // If the quantity becomes zero, remove the item from the cart
         if (cartItems[index].quantity == 0) {
@@ -176,7 +176,13 @@ class _CartPageState extends State<CartPage> {
                       ElevatedButton(
                         onPressed: () {
                           String stripeAPIPrice = "0.01";
-                          payment.makePayment(context, stripeAPIPrice);
+                          //payment.makePayment(context, stripeAPIPrice);
+                          Navigator.push(
+                          context,
+                          PageTransition(
+                              type: PageTransitionType.fade,
+                              child: CardInputPage()));
+                              
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
