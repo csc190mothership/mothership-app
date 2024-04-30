@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:mothership/screens/cart.dart';
+import 'package:provider/provider.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class Product {
@@ -60,6 +62,8 @@ class _ShopItemState extends State<ShopItem> {
 
   @override
   Widget build(BuildContext context) {
+    CartModel _cartModel = Provider.of<CartModel>(context);
+    
     return Scaffold(
       appBar: AppBar(
         title: Text(_item.name), //add item data to push on shopitem
@@ -68,12 +72,31 @@ class _ShopItemState extends State<ShopItem> {
         children: [
           SizedBox(height: 20),
           Center(child:
-            FadeInImage.memoryNetwork(
-              placeholder: kTransparentImage,
-              image: _item.imageURL,
+            ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: FadeInImage.memoryNetwork(
+                placeholder: kTransparentImage,
+                image: _item.imageURL,
+                width: 300,
+              ),
             )
           ),
+          SizedBox(height: 20),
           Text("\$" + (_item.price).toString()),
+          SizedBox(height: 20),
+          ElevatedButton(
+            onPressed: () {
+              setState(() {
+                if (_cartModel.isItemInCart(widget.item)) {
+                  _cartModel.incrementItemQuantity(widget.item);
+                } else {
+                  _cartModel.addItemToCart(widget.item);
+                  _cartModel.incrementItemQuantity(widget.item);
+                }
+              });
+            },
+            child: Text("Add to Cart"),
+          ),
         ],
       ),
     );

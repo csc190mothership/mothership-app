@@ -63,26 +63,8 @@ class _ShopState extends State<Shop> {
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
-                    minimumSize: Size(MediaQuery.of(context).size.width * 0.45, 0),
-                    padding: EdgeInsets.symmetric(vertical: 16), // Add vertical padding of 16
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    backgroundColor: Color(0xFFC2B2B4),
-                  ),
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      PageTransition(type: PageTransitionType.fade, child: SavedListsPage()),
-                    );
-                  },
-                  child: Text("Saved Lists", style: TextStyle(color: Colors.black)),
-                ),
-                ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    elevation: 0,
                     
-                    minimumSize: Size(MediaQuery.of(context).size.width * 0.45, 0),
+                    minimumSize: Size(MediaQuery.of(context).size.width * 0.9, 0),
                     padding: EdgeInsets.symmetric(vertical: 16), // Add vertical padding of 16
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(10),
@@ -92,7 +74,7 @@ class _ShopState extends State<Shop> {
                   onPressed: () {
                     //TODO: Orders Page
                   },
-                  child: Text("Orders", style: TextStyle(color: Colors.black)),
+                  child: Text("Past Orders", style: TextStyle(color: Colors.black)),
                 ),
               ],
             ),

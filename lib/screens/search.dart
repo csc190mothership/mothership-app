@@ -110,6 +110,9 @@ class _SearchState extends State<Search> {
                       child: TextField(
                         controller: _searchController,
                         cursorColor: Colors.black,
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
                         decoration: InputDecoration(
                           hintText: 'Search...',
                           border: InputBorder.none,

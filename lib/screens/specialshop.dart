@@ -156,58 +156,66 @@ class _SpecialShopState extends State<SpecialShop> {
     
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8),
-      child: Container(
-      padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Color(0xFFC2B2B4),
-      ),
-      width:180,
-      height:220,
-      child: Column(
-        children: [
-        Container(
-          height: 100,
-          width: 100,
-          child: Image.network(item.imageURL),
-        ),
-        Container(
-          height: 70,
-          child: Text(
-          item.name,
-          overflow: TextOverflow.ellipsis,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            fontSize: 14,
-          ),
-          maxLines: 3,
-          ),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text("\$"+item.price.toStringAsFixed(2)),
-            
-            CircleAvatar(
-              radius: 20,
-              backgroundColor: Colors.white,
-              child: IconButton(
-                onPressed: () {
-                  if (_cartModel.isItemInCart(item)) {
-                    _cartModel.incrementItemQuantity(item);
-                  } else {
-                    _cartModel.addItemToCart(item);
-                    _cartModel.incrementItemQuantity(item);
-                  }
-                },
-                icon: Icon(Icons.add),
-              ),
+      child: GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ShopItem(item: item),
             ),
-
-          ],
+          );
+        },
+        child: Container(
+          padding: EdgeInsets.all(10),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: Color(0xFFC2B2B4),
+          ),
+          width: 180,
+          height: 220,
+          child: Column(
+            children: [
+              Container(
+                height: 100,
+                width: 100,
+                child: Image.network(item.imageURL),
+              ),
+              Container(
+                height: 70,
+                child: Text(
+                  item.name,
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    fontSize: 14,
+                  ),
+                  maxLines: 3,
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text("\$" + item.price.toStringAsFixed(2)),
+                  CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Colors.white,
+                    child: IconButton(
+                      onPressed: () {
+                        if (_cartModel.isItemInCart(item)) {
+                          _cartModel.incrementItemQuantity(item);
+                        } else {
+                          _cartModel.addItemToCart(item);
+                          _cartModel.incrementItemQuantity(item);
+                        }
+                      },
+                      icon: Icon(Icons.add),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
-        ],
-      ),
       ),
     );
   }
