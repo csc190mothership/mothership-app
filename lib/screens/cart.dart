@@ -175,7 +175,8 @@ class _CartPageState extends State<CartPage> {
                       Text("\$$totalPrice"),
                       ElevatedButton(
                         onPressed: () {
-                          payment.makePayment(context, totalPrice);
+                          String stripeAPIPrice = "0.01";
+                          payment.makePayment(context, stripeAPIPrice);
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
