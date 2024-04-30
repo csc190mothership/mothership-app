@@ -60,6 +60,7 @@ class _ShopState extends State<Shop> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
+                /*
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     elevation: 0,
@@ -78,10 +79,9 @@ class _ShopState extends State<Shop> {
                   },
                   child: Text("Past Orders",
                       style: TextStyle(color: Colors.black)),
-                ),
+                ),*/
               ],
             ),
-            SizedBox(height: 20),
             Text(
               "Popular Departments",
               style: TextStyle(
@@ -90,7 +90,7 @@ class _ShopState extends State<Shop> {
               ),
             ),
             Container(
-              height: 400,
+              height: 600,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 15),
                 child: SingleChildScrollView(
@@ -120,10 +120,20 @@ class _ShopState extends State<Shop> {
                         PushSpecialShop(
                             "Alcohol", "Beer", "Wine", "Josh", "Hard Seltzer");
                       }),
-                      SpecialShopButton(Color.fromARGB(255, 185, 185, 185),
+                      SpecialShopButton(Color.fromARGB(255, 140, 175, 162),
                           "Dairy", "assets/images/dairy.png", () {
                         PushSpecialShop(
                             "Dairy", "Milk", "Yogurt", "Ice Cream", "Cheese");
+                      }),
+                      SpecialShopButton(Color.fromARGB(255, 137, 147, 189),
+                          "Cleaning", "assets/images/cleaning.png", () {
+                        PushSpecialShop(
+                          "Cleaning", "Detergent", "Bleach", "Vinegar", "Soap");
+                      }),
+                      SpecialShopButton(Color.fromARGB(255, 216, 129, 190),
+                          "Sweets", "assets/images/candy.png", () {
+                        PushSpecialShop(
+                          "Sweets", "Cookies", "Chocolate", "Gummy", "Gum");
                       }),
                     ],
                   ),

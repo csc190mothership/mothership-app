@@ -99,6 +99,7 @@ class CartModel with ChangeNotifier {
   void addItemToCart(Product item) {
     if (isItemInCart(item) == false) {
       cartItems.add(item);
+      incrementItemQuantity(item); // Call incrementItemQuantity to set the quantity to 1 (if it's not null
       notifyListeners();
       uploadCartData(); // Call uploadCartData to save changes to the database
     }

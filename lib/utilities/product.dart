@@ -7,13 +7,13 @@ class Product {
   final String name;
   final String imageURL;
   final double price;
-  int? quantity = 1;
+  int quantity = 1;
 
   Product(
       {required this.name,
       required this.imageURL,
       required this.price,
-      this.quantity});
+      required this.quantity});
 
   // Convert Product instance to JSON format
   Map<String, dynamic> toJson() {
@@ -61,6 +61,7 @@ class Product {
     return Product(
       name: json['description'] ?? 'No name',
       imageURL: imageURL,
+      quantity: 0,
       price: price,
     );
   }
