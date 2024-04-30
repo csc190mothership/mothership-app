@@ -7,9 +7,33 @@ class Product {
   final String name;
   final String imageURL;
   final double price;
-  int quantity = 0;
+  int? quantity = 1;
 
-  Product({required this.name, required this.imageURL, required this.price});
+  Product(
+      {required this.name,
+      required this.imageURL,
+      required this.price,
+      this.quantity});
+
+  // Convert Product instance to JSON format
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'price': price,
+      'quantity': quantity,
+      'imageURL': imageURL,
+    };
+  }
+
+  int? incrementQuantity() {
+    if (quantity != null) {
+      quantity =
+          quantity! + 1; // Add a null check (!) before accessing quantity
+      return quantity;
+    } else {
+      return null; // Return null if quantity is already null
+    }
+  }
 
   factory Product.fromJson(Map<String, dynamic> json) {
     String imageURL = "";
@@ -35,13 +59,22 @@ class Product {
       price = json['items'][0]['price']['regular'] * 1.0 ?? 0.0;
     }
     return Product(
-        name: json['description'] ?? 'No name',
-        imageURL: imageURL,
-        price: price);
+      name: json['description'] ?? 'No name',
+      imageURL: imageURL,
+      price: price,
+    );
   }
-  int incrementQuantity() {
-    quantity++;
-    return quantity;
+
+  factory Product.fromAnotherJson(Map<String, dynamic> json) {
+    // Your different JSON parsing logic goes here
+    // This factory method can be tailored for a different feature or use case
+    return Product(
+      name: json['name'] ?? 'No name', // Assign default value if name is null
+      price: json['price'] ?? 0.0, // Assign default value if price is null
+      imageURL: json['imageURL'], // Assign default value if imageURL is null
+      quantity:
+          json['quantity'] ?? 0, // Assign default value if quantity is null
+    );
   }
 }
 
@@ -63,7 +96,7 @@ class _ShopItemState extends State<ShopItem> {
   @override
   Widget build(BuildContext context) {
     CartModel _cartModel = Provider.of<CartModel>(context);
-    
+
     return Scaffold(
       appBar: AppBar(
         title: Text(_item.name), //add item data to push on shopitem
@@ -71,16 +104,15 @@ class _ShopItemState extends State<ShopItem> {
       body: Column(
         children: [
           SizedBox(height: 20),
-          Center(child:
-            ClipRRect(
-              borderRadius: BorderRadius.circular(20),
-              child: FadeInImage.memoryNetwork(
-                placeholder: kTransparentImage,
-                image: _item.imageURL,
-                width: 300,
-              ),
-            )
-          ),
+          Center(
+              child: ClipRRect(
+            borderRadius: BorderRadius.circular(20),
+            child: FadeInImage.memoryNetwork(
+              placeholder: kTransparentImage,
+              image: _item.imageURL,
+              width: 300,
+            ),
+          )),
           SizedBox(height: 20),
           Text("\$" + (_item.price).toString()),
           SizedBox(height: 20),

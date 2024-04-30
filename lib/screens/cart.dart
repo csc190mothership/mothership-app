@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:mothership/main.dart';
+import 'package:mothership/payment.dart';
 import 'package:mothership/utilities/product.dart';
 import 'package:provider/provider.dart';
 
@@ -68,8 +69,8 @@ class CartModel with ChangeNotifier {
       // Check if quantity is not null before incrementing it
       if (cartItems[index].quantity != null) {
         // increment the quantity by 1
-        cartItems[index].quantity = cartItems[index].quantity! + 1;
-           // (cartItems[index].quantity! + 1).clamp(0, double.infinity.toInt());
+        cartItems[index].quantity =
+            (cartItems[index].quantity! + 1).clamp(0, double.infinity.toInt());
         notifyListeners();
       }
     }
@@ -82,7 +83,8 @@ class CartModel with ChangeNotifier {
       // Check if quantity is not null before decrementing it
       if (cartItems[index].quantity != null) {
         // Decrement the quantity by 1 if it's not null
-        cartItems[index].quantity = cartItems[index].quantity! - 1;
+        cartItems[index].quantity =
+            (cartItems[index].quantity! - 1).clamp(0, double.infinity.toInt());
 
         // If the quantity becomes zero, remove the item from the cart
         if (cartItems[index].quantity == 0) {
@@ -123,6 +125,8 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  final payment = Payment();
+
   @override
   void initState() {
     super.initState();
@@ -171,7 +175,8 @@ class _CartPageState extends State<CartPage> {
                       Text("\$$totalPrice"),
                       ElevatedButton(
                         onPressed: () {
-                          // TODO: Implement the payment process or checkout
+                          String stripeAPIPrice = "0.01";
+                          payment.makePayment(context, stripeAPIPrice);
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -201,7 +206,7 @@ class _CartPageState extends State<CartPage> {
                           Provider.of<CartModel>(context, listen: false)
                               .clearCart();
                         },
-                        child: Text('Clear Cart'),
+                        child: const Text('Clear Cart'),
                       ),
                     ],
                   ),

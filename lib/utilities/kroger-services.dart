@@ -1,3 +1,5 @@
+// ignore_for_file: file_names, avoid_print
+
 import 'package:oauth2/oauth2.dart' as oauth2;
 import 'package:http/http.dart' as http;
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -6,7 +8,7 @@ import 'product.dart';
 
 class KrogerService {
   final Uri tokenUrl =
-      Uri.parse('https://api.kroger.com/v1/connect/oauth2/token'!);
+      Uri.parse('https://api.kroger.com/v1/connect/oauth2/token');
   final List<String> scopes = ['product.compact'];
 
   Future<oauth2.Client> authenticate() async {

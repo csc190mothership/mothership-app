@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mothership/functions.dart';
-import 'package:mothership/screens/loginscreens/resetpassword.dart';
-import 'package:page_transition/page_transition.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -272,7 +270,6 @@ class _ProfilePageState extends State<ProfilePage> {
               child: const Text('Sign Out'),
             ),
             const SizedBox(height: 10),
-            
           ],
         ),
       ),

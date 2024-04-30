@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mothership/screens/cart.dart';
-import 'package:mothership/screens/loginscreens/login.dart';
-import 'package:mothership/screens/loginscreens/newpassword.dart';
-import 'package:mothership/screens/loginscreens/profile.dart';
-import 'package:mothership/screens/loginscreens/register.dart';
-import 'package:mothership/screens/loginscreens/resetpassword.dart';
-import 'package:mothership/screens/loginscreens/setupaccount.dart';
 import 'package:mothership/screens/loginscreens/splash.dart';
-import 'package:mothership/screens/wallet.dart';
 import 'package:mothership/themeprovider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'screens/settings.dart';
 import 'screens/shop.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
+  //Assign publishable key to flutter_stripe
+  Stripe.publishableKey =
+      "pk_test_51PBGVG039pfzjk2TI8cEgaSWhjqLd6mzuDDwl73lrjLV8nuUvc1LXgqsqhbZdIu9papaM58taybQaT3FNlJ3PQke009Bepphut";
+
   await dotenv.load(fileName: ".env");
   await Supabase.initialize(
     url: 'https://ptxjscxersbcxjkrygve.supabase.co',
