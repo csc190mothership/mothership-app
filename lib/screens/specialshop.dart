@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:mothership/screens/cart.dart';
 import 'package:mothership/utilities/kroger-services.dart';
@@ -34,9 +32,6 @@ class _SpecialShopState extends State<SpecialShop> {
   List<Product> _products4 = [];
   bool _isLoading = false;
 
-
-
-
   @override
   void initState() {
     super.initState();
@@ -55,7 +50,7 @@ class _SpecialShopState extends State<SpecialShop> {
     var products2 = await _krogerService.fetchProductData(widget.search2);
     var products3 = await _krogerService.fetchProductData(widget.search3);
     var products4 = await _krogerService.fetchProductData(widget.search4);
-    
+
     setState(() {
       _products1 = products1;
       _products2 = products2;
@@ -67,69 +62,76 @@ class _SpecialShopState extends State<SpecialShop> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body:
-      SingleChildScrollView(
-        child: Stack(
-          children: [
-            Column(
-              children: [
-                SizedBox(height:40),
-                Row(
-                  children: [
-                    SizedBox(width: 10),
-                    CircleAvatar(
-                      radius: 30,
-                      child: IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: Icon(Icons.arrow_back),
-                      ),
+        body: SingleChildScrollView(
+      child: Stack(
+        children: [
+          Column(
+            children: [
+              SizedBox(height: 40),
+              Row(
+                children: [
+                  SizedBox(width: 10),
+                  CircleAvatar(
+                    radius: 30,
+                    child: IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: Icon(Icons.arrow_back),
                     ),
-                    SizedBox(width: 20),
-                    Text(
-                      widget.department,
-                      style: const TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                  SizedBox(width: 20),
+                  Text(
+                    widget.department,
+                    style: const TextStyle(
+                      fontSize: 36,
+                      fontWeight: FontWeight.bold,
                     ),
-                  ],
-                ),
-              ],
-            ),
-            Column(
-              children: [
-                SizedBox(height: 120),
-                Text(widget.search1, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                _isLoading ? _buildLoadingIndicator() : SideScrollItems(widget.search1, _products1),
-                Text(widget.search2, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                _isLoading ? _buildLoadingIndicator() : SideScrollItems(widget.search1, _products2),
-                Text(widget.search3, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                _isLoading ? _buildLoadingIndicator() : SideScrollItems(widget.search1, _products3),
-                Text(widget.search4, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                _isLoading ? _buildLoadingIndicator() : SideScrollItems(widget.search1, _products4),
-              ],
-            ),
-          ],
-        ),
-      )
-      
-        
-      
-    );
+                  ),
+                ],
+              ),
+            ],
+          ),
+          Column(
+            children: [
+              SizedBox(height: 120),
+              Text(
+                widget.search1,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+              _isLoading
+                  ? _buildLoadingIndicator()
+                  : SideScrollItems(widget.search1, _products1),
+              Text(widget.search2,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              _isLoading
+                  ? _buildLoadingIndicator()
+                  : SideScrollItems(widget.search1, _products2),
+              Text(widget.search3,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              _isLoading
+                  ? _buildLoadingIndicator()
+                  : SideScrollItems(widget.search1, _products3),
+              Text(widget.search4,
+                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+              _isLoading
+                  ? _buildLoadingIndicator()
+                  : SideScrollItems(widget.search1, _products4),
+            ],
+          ),
+        ],
+      ),
+    ));
   }
 
   Widget _buildLoadingIndicator() {
     return Container(
       height: 300,
       width: MediaQuery.of(context).size.width,
-      child: Center(child:CircularProgressIndicator()),
+      child: Center(child: CircularProgressIndicator()),
     );
   }
 
@@ -137,23 +139,22 @@ class _SpecialShopState extends State<SpecialShop> {
     return Padding(
       padding: EdgeInsets.symmetric(vertical: 10),
       child: SizedBox(
-      width: MediaQuery.of(context).size.width,
-      height: 230,
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: prodlist.length,
-        itemBuilder: (BuildContext context, int index) {
-        return ItemCard(prodlist[index]);
-        },
-      ),
+        width: MediaQuery.of(context).size.width,
+        height: 230,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: prodlist.length,
+          itemBuilder: (BuildContext context, int index) {
+            return ItemCard(prodlist[index]);
+          },
+        ),
       ),
     );
   }
 
   Widget ItemCard(Product item) {
-    
     CartModel _cartModel = Provider.of<CartModel>(context);
-    
+
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 8),
       child: GestureDetector(

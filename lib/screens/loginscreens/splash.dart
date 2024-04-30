@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:mothership/functions.dart';
+import 'package:mothership/screens/cart.dart';
 import 'package:mothership/screens/loginscreens/login.dart';
 import 'package:mothership/screens/loginscreens/register.dart';
 import 'package:page_transition/page_transition.dart';
@@ -16,29 +16,40 @@ class SplashPage extends StatefulWidget {
 }
 
 class _SplashPageState extends State<SplashPage> {
+  late CartModel _cartModel;
   late VideoPlayerController _controller;
-  bool _visible = false;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.networkUrl(Uri.parse('https://bradynorum.com/groceries.mp4'));
+    _controller = VideoPlayerController.networkUrl(
+        Uri.parse('https://bradynorum.com/groceries.mp4'));
     _controller.initialize().then((_) {
       _controller.setLooping(true);
-      Timer(Duration(milliseconds: 100), () {
+      Timer(const Duration(milliseconds: 100), () {
         setState(() {
           _controller.play();
-          _visible = true;
         });
       });
     });
+
+    // Initialize _cartModel
+    _cartModel = CartModel();
+
+    // Call fetchCartData after the context is fully initialized
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _fetchCartData();
+    });
   }
 
-    @override
+  Future<void> _fetchCartData() async {
+    await _cartModel.fetchCartData(context);
+  }
+
+  @override
   void dispose() {
     super.dispose();
     _controller.dispose();
-    
   }
 
   @override
@@ -50,47 +61,44 @@ class _SplashPageState extends State<SplashPage> {
             color: Colors.black,
           ),
           _getVideoBackground(),
-          
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Image.asset('assets/images/dairy.png', width: 200),
-                Text("Welcome to Mothership!", style:TextStyle(fontSize: 30, color: Colors.white)),
-                SizedBox(height: 20),
+                const Text("Welcome to Mothership!",
+                    style: TextStyle(fontSize: 30, color: Colors.white)),
+                const SizedBox(height: 20),
                 ElevatedButton(
                   onPressed: () {
-                    changePage(context, RegisterPage());
+                    changePage(context, const RegisterPage());
                   },
-                  child: Text("Register"),
+                  child: const Text("Register"),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 ElevatedButton(
                   onPressed: () {
-                    changePage(context, LoginPage());
+                    changePage(context, const LoginPage());
                   },
-                  child: Text("Login"),
+                  child: const Text("Login"),
                 ),
               ],
             ),
           ),
         ],
       ),
-
     );
   }
 
-  void changePage(BuildContext context, Widget Screen) {
+  void changePage(BuildContext context, Widget screen) {
     Navigator.push(
-                  context,
-                  PageTransition(type: PageTransitionType.fade, child:Screen)
-                
-                );
+        context, PageTransition(type: PageTransitionType.fade, child: screen));
   }
+
   _getVideoBackground() {
     return AnimatedOpacity(
       opacity: .6,
-      duration: Duration(milliseconds: 1000),
+      duration: const Duration(milliseconds: 1000),
       child: SizedBox.expand(
         child: FittedBox(
           fit: BoxFit.cover,

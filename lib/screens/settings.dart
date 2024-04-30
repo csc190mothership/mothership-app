@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api
+
 import 'package:flutter/material.dart';
 import 'package:mothership/functions.dart';
 import 'package:mothership/screens/loginscreens/profile.dart';
@@ -8,20 +10,20 @@ import '../themeprovider.dart';
 
 Widget settingsTile(String title, Function onTap, [bool withDivider = true]) {
   if (withDivider) {
-    return Column(children:[ListTile(
-      title: Text(title),
-      trailing: const Icon(Icons.arrow_forward),
-      onTap: onTap as void Function()?,
-    ),
-    settingsDivider(),
+    return Column(children: [
+      ListTile(
+        title: Text(title),
+        trailing: const Icon(Icons.arrow_forward),
+        onTap: onTap as void Function()?,
+      ),
+      settingsDivider(),
     ]);
   }
-  return 
-    ListTile(
-      title: Text(title),
-      trailing: const Icon(Icons.arrow_forward),
-      onTap: onTap as void Function()?,
-    );
+  return ListTile(
+    title: Text(title),
+    trailing: const Icon(Icons.arrow_forward),
+    onTap: onTap as void Function()?,
+  );
 }
 
 Widget settingsDivider() {
@@ -29,20 +31,14 @@ Widget settingsDivider() {
 }
 
 Widget settingsHeader(String title) {
-  return Column(children:[
+  return Column(children: [
     ListTile(
-      title: Text(
-        title, 
-        style: const TextStyle(
-          fontSize: 24,
-          fontWeight: FontWeight.bold
-        )
-      ),
+      title: Text(title,
+          style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
     ),
     settingsDivider(),
   ]);
 }
-
 
 ///GENERAL SETTINGS
 class Settings extends StatefulWidget {
@@ -78,13 +74,13 @@ class _SettingsState extends State<Settings> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? const Center(child: CircularProgressIndicator())
           : ListView(
               children: [
                 Padding(
                   padding: const EdgeInsets.only(top: 20, left: 20, bottom: 20),
                   child: Text(
-                    "Hello, " + _firstNameController.text,
+                    "Hello, ${_firstNameController.text}",
                     style: const TextStyle(
                       fontSize: 36,
                       fontWeight: FontWeight.bold,
@@ -101,7 +97,7 @@ class _SettingsState extends State<Settings> {
                 }),
                 settingsTile("Addresses", () {}),
                 settingsTile("Reset Password", () {
-                  pushScreen(ResetPasswordPage());
+                  pushScreen(const ResetPasswordPage());
                 }),
               ],
             ),
@@ -115,6 +111,7 @@ class _SettingsState extends State<Settings> {
     );
   }
 }
+
 //APPEARANCE SETTINGS
 class AppearanceSettings extends StatefulWidget {
   const AppearanceSettings({super.key});
@@ -138,22 +135,19 @@ class _AppearanceSettingsState extends State<AppearanceSettings> {
           ListTile(
             title: const Text("Theme"),
             onTap: () {
-                  Provider.of<ThemeProvider>(context, listen:false).toggleTheme();
-                  if (lightnessIcon == Icons.wb_sunny_rounded) {
-                    setState(() {
-                      lightnessIcon = Icons.nightlight_round;
-                    });
-                  } else {
-                    setState(() {
-                      lightnessIcon = Icons.wb_sunny_rounded;
-                    });
-                  }
-                },
+              Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+              if (lightnessIcon == Icons.wb_sunny_rounded) {
+                setState(() {
+                  lightnessIcon = Icons.nightlight_round;
+                });
+              } else {
+                setState(() {
+                  lightnessIcon = Icons.wb_sunny_rounded;
+                });
+              }
+            },
             trailing: Icon(lightnessIcon),
-
           ),
-        
-          
         ],
       )),
     );
@@ -178,20 +172,24 @@ class _AccountSettingsState extends State<AccountSettings> {
       body: ListView(
         children: [
           settingsHeader("Profile"),
-          settingsTile("Profile Details", (){Navigator.push(context, PageTransition(type: PageTransitionType.rightToLeft, child:const ProfilePage()));}),
+          settingsTile("Profile Details", () {
+            Navigator.push(
+                context,
+                PageTransition(
+                    type: PageTransitionType.rightToLeft,
+                    child: const ProfilePage()));
+          }),
           settingsHeader("My Account"),
-          settingsTile("Change Email", (){changeSomething(context, email, "Email");}),
-          
-          
+          settingsTile("Change Email", () {
+            changeSomething(context, email, "Email");
+          }),
         ],
       ),
     );
   }
 }
 
-
 Future<void> changeSomething(context, varToChange, String name) async {
-  var _newItem = "";
   return showDialog<void>(
     context: context,
     barrierDismissible: true, // user must tap button!
@@ -202,17 +200,14 @@ Future<void> changeSomething(context, varToChange, String name) async {
           child: ListBody(
             children: <Widget>[
               Text('Old $name: '),
-              TextField(
+              const TextField(
                   //later will have to confirm the old value matches.
                   //for now, its just a field.
 
-                  
-              
-                ),
+                  ),
               Text('New $name: '),
               TextField(
                 onChanged: (value) {
-                  _newItem = value;
                   //then set the user's value to _newItem
                   //we use variable _newItem because it provides safe exchange to user data
                   //on top of this, we can use this function for other values if needed
