@@ -1,6 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:mothership/main.dart';
+import 'package:mothership/payment.dart';
 import 'package:mothership/utilities/product.dart';
 import 'package:provider/provider.dart';
 
@@ -124,6 +125,8 @@ class CartPage extends StatefulWidget {
 }
 
 class _CartPageState extends State<CartPage> {
+  final payment = Payment();
+
   @override
   void initState() {
     super.initState();
@@ -172,7 +175,7 @@ class _CartPageState extends State<CartPage> {
                       Text("\$$totalPrice"),
                       ElevatedButton(
                         onPressed: () {
-                          // TODO: Implement the payment process or checkout
+                          payment.makePayment(context, totalPrice);
                         },
                         style: ElevatedButton.styleFrom(
                           shape: RoundedRectangleBorder(
@@ -202,7 +205,7 @@ class _CartPageState extends State<CartPage> {
                           Provider.of<CartModel>(context, listen: false)
                               .clearCart();
                         },
-                        child: Text('Clear Cart'),
+                        child: const Text('Clear Cart'),
                       ),
                     ],
                   ),

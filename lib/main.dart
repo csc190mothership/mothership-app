@@ -7,9 +7,14 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'screens/settings.dart';
 import 'screens/shop.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  //Assign publishable key to flutter_stripe
+  Stripe.publishableKey =
+      "pk_test_51PBGVG039pfzjk2TI8cEgaSWhjqLd6mzuDDwl73lrjLV8nuUvc1LXgqsqhbZdIu9papaM58taybQaT3FNlJ3PQke009Bepphut";
 
   await dotenv.load(fileName: ".env");
   await Supabase.initialize(
