@@ -8,7 +8,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 
 class Payment {
   Map<String, dynamic>? paymentIntent;
-
+  /*
   Future<void> makePayment(BuildContext context, String amount) async {
     try {
       paymentIntent = await createPaymentIntent(amount, 'USD');
@@ -25,10 +25,26 @@ class Payment {
     } catch (err) {
       throw Exception(err.toString());
     }
-  }
+  }*/
+  /*
+  Future<void> uploadOrderData() async {
+    try {
+      final userId = supabase.auth.currentUser?.id;
+      if (userId != null) {
+        final jsonData = cartItems.map((product) => product.toJson()).toList();
+        await supabase
+            .from('profiles')
+            .update({'cart_items': jsonData}).eq('id', userId);
+      }
+    } catch (e) {
+      //
+    }
 
+  }
+  */
   Future<void> displayPaymentSheet(BuildContext context) async {
     try {
+      
       await Stripe.instance.presentPaymentSheet().then((value) {
         showDialog(
           context: context,
