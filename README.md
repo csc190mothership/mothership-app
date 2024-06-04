@@ -1,6 +1,6 @@
 # MOTHERSHIP
 
-A project made from CSC190 at Hofstra University by Mohammed Ali, Roshni Varkey, Ethan Ramos, Brady Norum, and Nik Valle.
+A project made from CSC190 at Hofstra University by Mohammad Ali, Roshni Varkey, Ethan Ramos, Brady Norum, and Nik Valle.
 
 Uses Flutter, Supabase.
 
